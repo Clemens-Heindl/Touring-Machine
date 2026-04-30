@@ -1,268 +1,99 @@
 <div class="app-shell">
-  <input class="view-toggle" type="radio" id="view-dashboard" name="view" checked />
-  <input class="view-toggle" type="radio" id="view-tours" name="view" />
-  <input class="view-toggle" type="radio" id="view-logs" name="view" />
-  <input class="view-toggle" type="radio" id="view-import" name="view" />
-  <input class="view-toggle" type="radio" id="view-profile" name="view" />
+  <input class="view-toggle" type="radio" id="view-login" name="view" checked />
+  <input class="view-toggle" type="radio" id="view-main" name="view" />
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">TM</div>
-      <div>
-        <p class="brand-title">Touring Machine</p>
-        <p class="brand-subtitle">Wireframe UI / demo data only</p>
-      </div>
-    </div>
-    <div class="top-search">
-      <input type="search" placeholder="Search tours, logs, locations" />
-      <button class="ghost">Search</button>
-    </div>
-    <div class="top-actions">
-      <button class="ghost">New tour</button>
-      <button class="primary">Plan route</button>
-      <button class="chip">Demo mode</button>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Tour planning studio</p>
-      <h1>Plan tours, log adventures, and read your stats at a glance.</h1>
-      <p class="lead">
-        This is a clickable wireframe. Everything is mocked so you can explore the
-        flow without any backend.
-      </p>
-      <div class="hero-actions">
-        <button class="primary">Create a tour</button>
-        <button class="ghost">Import data</button>
-      </div>
-    </div>
-    <div class="hero-grid">
-      <div class="card stat-card">
-        <p class="stat-label">Active tours</p>
-        <p class="stat-value">12</p>
-        <p class="stat-meta">3 scheduled this week</p>
-      </div>
-      <div class="card stat-card">
-        <p class="stat-label">Logs this month</p>
-        <p class="stat-value">6</p>
-        <p class="stat-meta">+2 vs last month</p>
-      </div>
-      <div class="card stat-card">
-        <p class="stat-label">Total distance</p>
-        <p class="stat-value">213 km</p>
-        <p class="stat-meta">Across bike and hike</p>
+  <section class="panel panel-login" aria-label="Login">
+    <div class="login-wrap">
+      <div class="card login-card">
+        <div class="brand">
+          <div class="logo">TM</div>
+          <div>
+            <p class="brand-title">Touring Machine</p>
+            <p class="brand-subtitle">Wireframe login</p>
+            </div>
+            </div>
+        <h1>Welcome back</h1>
+        <p class="lead">No credentials needed. Log in to enter the wireframe.</p>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Password" />
+        </div>
+        <div class="button-row">
+          <label class="button-label primary" for="view-main">Log in</label>
+          <label class="button-label ghost" for="view-main">Continue without login</label>
+        </div>
+        <p class="hint">Log in always enters the main page, even if fields are empty.</p>
       </div>
     </div>
   </section>
 
-  <div class="mode-switch" role="tablist" aria-label="Wireframe sections">
-    <label id="tab-dashboard" for="view-dashboard" role="tab">Dashboard</label>
-    <label id="tab-tours" for="view-tours" role="tab">Tours</label>
-    <label id="tab-logs" for="view-logs" role="tab">Tour logs</label>
-    <label id="tab-import" for="view-import" role="tab">Import and export</label>
-    <label id="tab-profile" for="view-profile" role="tab">Account</label>
-  </div>
-
-  <div class="panels">
-    <section class="panel panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
-      <div class="panel-header">
+  <section class="panel panel-main" aria-label="Main">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">TM</div>
         <div>
-          <p class="panel-eyebrow">Overview</p>
-          <h2>Dashboard</h2>
-          <p class="panel-subtitle">A quick pulse of tours, logs, and computed stats.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">Create tour</button>
-          <button class="primary">Start route planner</button>
+          <p class="brand-title">Touring Machine</p>
+          <p class="brand-subtitle">Simple wireframe view</p>
         </div>
       </div>
-
-      <div class="grid grid-3">
-        <div class="card">
-          <h3>Upcoming tours</h3>
-          <ul class="list">
-            <li class="list-item">
-              <div>
-                <p class="item-title">River Loop Ride</p>
-                <p class="item-meta">Bike - Saturday 08:30 - 38 km</p>
-              </div>
-              <button class="chip">Open</button>
-            </li>
-            <li class="list-item">
-              <div>
-                <p class="item-title">Alpine Day Hike</p>
-                <p class="item-meta">Hike - Sunday 06:00 - 14 km</p>
-              </div>
-              <button class="chip">Open</button>
-            </li>
-            <li class="list-item">
-              <div>
-                <p class="item-title">City Ridge Run</p>
-                <p class="item-meta">Run - Tuesday 19:00 - 7 km</p>
-              </div>
-              <button class="chip">Open</button>
-            </li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Route preview</h3>
-          <div class="map-placeholder">Leaflet map placeholder</div>
-          <div class="map-controls">
-            <button class="ghost">Switch layer</button>
-            <button class="ghost">Zoom to fit</button>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Computed metrics</h3>
-          <div class="stat-line">
-            <span>Popularity score</span>
-            <strong>8.4</strong>
-          </div>
-          <div class="stat-line">
-            <span>Child friendly index</span>
-            <strong>4.1 / 5</strong>
-          </div>
-          <div class="stat-line">
-            <span>Scenic index</span>
-            <strong>72%</strong>
-          </div>
-          <p class="hint">Derived from logs, distance, and difficulty.</p>
-        </div>
+      <div class="top-actions">
+        <button class="ghost">New tour</button>
+        <label class="button-label outline" for="view-login">Log out</label>
       </div>
+    </header>
 
-      <div class="grid grid-2">
-        <div class="card">
-          <h3>Recent logs</h3>
-          <div class="log-row">
+    <section class="main-grid">
+      <div class="card map-card">
+        <h2>Route map</h2>
+        <div class="map-placeholder map-hero">Leaflet map placeholder</div>
+        <div class="map-controls">
+          <button class="ghost">Plan route</button>
+          <button class="ghost">Zoom to fit</button>
+          </div>
+          </div>
+          <div class="card">
+        <h3>Tour list</h3>
+        <ul class="list">
+          <li class="list-item is-active">
             <div>
               <p class="item-title">River Loop Ride</p>
-              <p class="item-meta">Yesterday - 38 km - Rating 4 / 5</p>
+              <p class="item-meta">Bike - Harbor Park to Quarry Bend</p>
             </div>
-            <button class="chip">Review</button>
-          </div>
-          <div class="log-row">
-            <div>
-              <p class="item-title">Lake Shore Hike</p>
-              <p class="item-meta">Apr 22 - 12 km - Rating 5 / 5</p>
-            </div>
-            <button class="chip">Review</button>
-          </div>
-          <div class="log-row">
-            <div>
-              <p class="item-title">City Ridge Run</p>
-              <p class="item-meta">Apr 20 - 6 km - Rating 3 / 5</p>
-            </div>
-            <button class="chip">Review</button>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Team goals</h3>
-          <div class="goal-row">
-            <div>
-              <p class="item-title">April distance</p>
-              <p class="item-meta">Goal 240 km</p>
-            </div>
-            <div class="progress">72%</div>
-          </div>
-          <div class="goal-row">
-            <div>
-              <p class="item-title">New trails tried</p>
-              <p class="item-meta">Goal 6</p>
-            </div>
-            <div class="progress">4 / 6</div>
-          </div>
-          <div class="goal-row">
-            <div>
-              <p class="item-title">Log consistency</p>
-              <p class="item-meta">3 per week</p>
-            </div>
-            <div class="progress">On track</div>
-          </div>
-        </div>
-      </div>
-      </section>
-
-    <section class="panel panel-tours" role="tabpanel" aria-labelledby="tab-tours">
-      <div class="panel-header">
-        <div>
-          <p class="panel-eyebrow">Plan and manage</p>
-          <h2>Tours</h2>
-          <p class="panel-subtitle">Create, edit, and explore every tour.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">New tour</button>
-          <button class="primary">Save draft</button>
-        </div>
-      </div>
-
-      <div class="layout layout-tours">
-        <aside class="card side">
-          <div class="card-header">
-            <h3>Tour list</h3>
-            <button class="ghost small">New</button>
-          </div>
-          <div class="search-row">
-            <input type="search" placeholder="Search tours" />
-            <button class="ghost">Go</button>
-          </div>
-          <div class="filter-chips">
-            <button class="chip is-active">All</button>
-            <button class="chip">Bike</button>
-            <button class="chip">Hike</button>
-            <button class="chip">Run</button>
-            <button class="chip">Vacation</button>
-          </div>
-          <ul class="list">
-            <li class="list-item is-active">
-              <div>
-                <p class="item-title">River Loop Ride</p>
-                <p class="item-meta">Bike - Harbor Park to Quarry Bend</p>
-              </div>
-              <div class="item-actions">
-                <button class="chip">View</button>
-                <button class="ghost small">Logs</button>
-              </div>
+            <button class="ghost">Open</button>
             </li>
             <li class="list-item">
               <div>
                 <p class="item-title">Alpine Day Hike</p>
                 <p class="item-meta">Hike - Summit Lot to Blue Ridge</p>
               </div>
-              <div class="item-actions">
-                <button class="chip">View</button>
-                <button class="ghost small">Logs</button>
-              </div>
+            <button class="ghost">Open</button>
             </li>
             <li class="list-item">
               <div>
                 <p class="item-title">Coastal Vacation</p>
                 <p class="item-meta">Vacation - 5 day loop</p>
               </div>
-              <div class="item-actions">
-                <button class="chip">View</button>
-                <button class="ghost small">Logs</button>
-              </div>
+            <button class="ghost">Open</button>
             </li>
-          </ul>
-        </aside>
+            </ul>
+      </div>
+      </section>
 
-        <section class="card detail">
-          <div class="detail-header">
-            <div>
-              <h3>River Loop Ride</h3>
-              <p class="item-meta">Harbor Park to Quarry Bend</p>
-            </div>
-            <div class="pill-group">
-              <span class="pill">Popularity 8</span>
-              <span class="pill">Child friendly 4 / 5</span>
-              <span class="pill">Scenic 72%</span>
-            </div>
+    <section class="detail-grid-simple">
+      <div class="card">
+        <h3>Selected tour</h3>
+        <div class="spec-grid">
+          <div class="spec">
+            <span class="spec-label">From</span>
+            <strong>Harbor Park</strong>
           </div>
-          <div class="detail-grid">
-            <div class="spec">
-              <span class="spec-label">Transport</span>
-              <strong>Bike</strong>
+          <div class="spec">
+            <span class="spec-label">To</span>
+            <strong>Quarry Bend</strong>
             </div>
             <div class="spec">
               <span class="spec-label">Distance</span>
@@ -272,423 +103,31 @@
               <span class="spec-label">Estimated time</span>
               <strong>2h 10m</strong>
             </div>
-            <div class="spec">
-              <span class="spec-label">Elevation</span>
-              <strong>+420 m</strong>
-            </div>
-          </div>
-          <div class="map-placeholder map-large">OpenRouteService route + Leaflet map</div>
-          <p class="hint">Route data is mocked. In the real app this comes from ORS.</p>
-          <div class="detail-actions">
-            <button class="primary">Open map</button>
-            <button class="ghost">Edit tour</button>
-            <button class="outline">Delete</button>
-          </div>
-        </section>
-
-        <form class="card form">
-          <h3>Create or edit tour</h3>
-          <div class="form-grid">
-            <div class="field">
-              <label for="tour-name">Tour name</label>
-              <input id="tour-name" type="text" placeholder="Morning river loop" />
-            </div>
-            <div class="field">
-              <label for="tour-date">Planned date</label>
-              <input id="tour-date" type="date" />
-            </div>
-            <div class="field">
-              <label for="tour-from">From</label>
-              <input id="tour-from" type="text" placeholder="Harbor Park" />
-            </div>
-            <div class="field">
-              <label for="tour-to">To</label>
-              <input id="tour-to" type="text" placeholder="Quarry Bend" />
-            </div>
-          </div>
-          <div class="field">
-            <label for="tour-description">Description</label>
-            <textarea id="tour-description" rows="3" placeholder="Quick scenic loop by the river."></textarea>
-          </div>
-          <p class="label">Transport type</p>
-          <div class="transport-grid">
-            <input type="radio" id="transport-bike" name="transport" checked />
-            <label for="transport-bike">Bike</label>
-            <input type="radio" id="transport-hike" name="transport" />
-            <label for="transport-hike">Hike</label>
-            <input type="radio" id="transport-run" name="transport" />
-            <label for="transport-run">Run</label>
-            <input type="radio" id="transport-vacation" name="transport" />
-            <label for="transport-vacation">Vacation</label>
-          </div>
-          <div class="form-grid">
-            <div class="field">
-              <label for="tour-distance">Distance</label>
-              <input id="tour-distance" type="text" placeholder="Auto from route" />
-            </div>
-            <div class="field">
-              <label for="tour-time">Estimated time</label>
-              <input id="tour-time" type="text" placeholder="Auto from route" />
-            </div>
-          </div>
-          <div class="field">
-            <label for="tour-image">Cover image</label>
-            <input id="tour-image" type="file" />
-          </div>
-          <div class="form-actions">
-            <button class="primary" type="button">Get route</button>
-            <button class="ghost" type="button">Save tour</button>
-          </div>
-        </form>
         </div>
-        </section>
-
-    <section class="panel panel-logs" role="tabpanel" aria-labelledby="tab-logs">
-      <div class="panel-header">
-        <div>
-          <p class="panel-eyebrow">Track achievements</p>
-          <h2>Tour logs</h2>
-          <p class="panel-subtitle">Create, edit, and analyze log entries.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">New log</button>
-          <button class="primary">Save log</button>
+        <div class="button-row">
+          <button class="primary">Edit tour</button>
+          <button class="ghost">Add log</button>
         </div>
       </div>
-
-      <div class="layout layout-logs">
-        <aside class="card side">
-          <div class="card-header">
-            <h3>Logs for River Loop Ride</h3>
-            <button class="ghost small">Add</button>
+      <div class="card">
+        <h3>Recent logs</h3>
+        <div class="log-row">
+          <div>
+            <p class="item-title">Sunny ride</p>
+            <p class="item-meta">Apr 26 - 38 km - Rating 4 / 5</p>
           </div>
-          <details open>
-            <summary>Apr 26 - Sunny ride</summary>
-            <div class="details-body">
-              <p class="item-meta">38 km - 2h 05m - Difficulty 3</p>
-              <div class="item-actions">
-                <button class="chip">Open</button>
-                <button class="ghost small">Edit</button>
-              </div>
-            </div>
-          </details>
-          <details>
-            <summary>Apr 19 - Evening spin</summary>
-            <div class="details-body">
-              <p class="item-meta">32 km - 1h 48m - Difficulty 2</p>
-              <div class="item-actions">
-                <button class="chip">Open</button>
-                <button class="ghost small">Edit</button>
-              </div>
-            </div>
-          </details>
-          <details>
-            <summary>Apr 12 - Windy loop</summary>
-            <div class="details-body">
-              <p class="item-meta">40 km - 2h 20m - Difficulty 4</p>
-              <div class="item-actions">
-                <button class="chip">Open</button>
-                <button class="ghost small">Edit</button>
-              </div>
-            </div>
-          </details>
-        </aside>
-
-        <section class="card detail">
-          <h3>Log details</h3>
-          <div class="detail-grid">
-            <div class="spec">
-              <span class="spec-label">Date and time</span>
-              <strong>Apr 26, 07:40</strong>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Difficulty</span>
-              <strong>3 / 5</strong>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Total distance</span>
-              <strong>38 km</strong>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Total time</span>
-              <strong>2h 05m</strong>
-            </div>
-          </div>
-          <div class="form-grid">
-            <div class="field">
-              <label for="log-rating">Rating</label>
-              <select id="log-rating">
-                <option>5 - Epic</option>
-                <option selected>4 - Great</option>
-                <option>3 - Solid</option>
-                <option>2 - Tough</option>
-                <option>1 - Rough</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="log-mood">Mood</label>
-              <select id="log-mood">
-                <option selected>Focused</option>
-                <option>Relaxed</option>
-                <option>Adventurous</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="log-comment">Comment</label>
-            <textarea id="log-comment" rows="4" placeholder="How did it feel? Surface, weather, notes."></textarea>
-          </div>
-          <div class="form-actions">
-            <button class="primary" type="button">Save log</button>
-            <button class="ghost" type="button">Duplicate</button>
-            <button class="outline" type="button">Delete</button>
-          </div>
-        </section>
-
-        <section class="card analytics">
-          <h3>Stats and auto metrics</h3>
-          <div class="chart-placeholder">Chart placeholder</div>
-          <div class="stat-line">
-            <span>Average speed</span>
-            <strong>18 km/h</strong>
-          </div>
-          <div class="stat-line">
-            <span>Consistency</span>
-            <strong>3 logs / week</strong>
-          </div>
-          <div class="badge-row">
-            <span class="pill">Child friendly 4 / 5</span>
-            <span class="pill">Popularity 8</span>
-          </div>
-        </section>
+          <button class="ghost">View</button>
         </div>
-        </section>
-
-    <section class="panel panel-import" role="tabpanel" aria-labelledby="tab-import">
-      <div class="panel-header">
-        <div>
-          <p class="panel-eyebrow">Data flow</p>
-          <h2>Import and export</h2>
-          <p class="panel-subtitle">Bring in data or ship a snapshot in one click.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">Download template</button>
-          <button class="primary">Export everything</button>
+        <div class="log-row">
+          <div>
+            <p class="item-title">Windy loop</p>
+            <p class="item-meta">Apr 12 - 40 km - Rating 3 / 5</p>
+            </div>
+          <button class="ghost">View</button>
         </div>
       </div>
-
-      <div class="grid grid-2">
-        <div class="card">
-          <h3>Import tours</h3>
-          <div class="drop-zone">Drop .json or .csv file here</div>
-          <div class="inline-actions">
-            <button class="ghost">Browse file</button>
-            <button class="primary">Import</button>
-          </div>
-          <div class="table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Distance</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Coastal Warmup</td>
-                  <td>Run</td>
-                  <td>6 km</td>
-                </tr>
-                <tr>
-                  <td>Forest Loop</td>
-                  <td>Hike</td>
-                  <td>11 km</td>
-                </tr>
-                <tr>
-                  <td>Downtown Ride</td>
-                  <td>Bike</td>
-                  <td>18 km</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Export data</h3>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" checked />
-              Include tour logs
-            </label>
-          </div>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" checked />
-              Include images
-            </label>
-          </div>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" />
-              Include computed stats
-            </label>
-          </div>
-          <div class="field">
-            <label for="export-format">Format</label>
-            <select id="export-format">
-              <option>JSON</option>
-              <option>CSV</option>
-              <option>PDF summary</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="primary" type="button">Export now</button>
-            <button class="ghost" type="button">Schedule</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card wide">
-        <h3>Unique feature: Adventure score</h3>
-        <p class="item-meta">
-          Combine elevation, weather, and surface data to suggest a personalized difficulty score.
-        </p>
-        <div class="detail-grid">
-          <div class="spec">
-            <span class="spec-label">Elevation gain</span>
-            <strong>+580 m</strong>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Weather risk</span>
-            <strong>Moderate</strong>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Surface</span>
-            <strong>Mixed trail</strong>
-          </div>
-          <div class="spec">
-            <span class="spec-label">Adventure score</span>
-            <strong>7.6 / 10</strong>
-          </div>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">Adjust weights</button>
-          <button class="primary">Add to tour</button>
-        </div>
-      </div>
-      </section>
-
-    <section class="panel panel-profile" role="tabpanel" aria-labelledby="tab-profile">
-      <div class="panel-header">
-        <div>
-          <p class="panel-eyebrow">Account and access</p>
-          <h2>Account</h2>
-          <p class="panel-subtitle">Sign in or stay in demo mode. No gating here.</p>
-        </div>
-        <div class="inline-actions">
-          <button class="ghost">Switch user</button>
-          <button class="primary">Save settings</button>
-        </div>
-      </div>
-
-      <div class="grid grid-2">
-        <div class="card">
-          <h3>Sign in</h3>
-          <div class="field">
-            <label for="signin-email">Email</label>
-            <input id="signin-email" type="email" placeholder="you@example.com" />
-          </div>
-          <div class="field">
-            <label for="signin-password">Password</label>
-            <input id="signin-password" type="password" placeholder="Password" />
-          </div>
-          <div class="form-actions">
-            <button class="primary" type="button">Sign in</button>
-            <button class="ghost" type="button">Continue in demo</button>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Create account</h3>
-          <div class="form-grid">
-            <div class="field">
-              <label for="register-name">Name</label>
-              <input id="register-name" type="text" placeholder="Alex Rider" />
-            </div>
-            <div class="field">
-              <label for="register-email">Email</label>
-              <input id="register-email" type="email" placeholder="alex@tour.io" />
-            </div>
-          </div>
-          <div class="field">
-            <label for="register-password">Password</label>
-            <input id="register-password" type="password" placeholder="Create a password" />
-          </div>
-          <div class="form-actions">
-            <button class="primary" type="button">Create account</button>
-            <button class="ghost" type="button">Invite team</button>
-          </div>
-          </div>
-          </div>
-
-      <div class="grid grid-3">
-        <div class="card">
-          <h3>User settings</h3>
-          <div class="field">
-            <label for="units">Units</label>
-            <select id="units">
-              <option>Metric (km, m)</option>
-              <option>Imperial (mi, ft)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="theme">Theme</label>
-            <select id="theme">
-              <option>Sand and Sage</option>
-              <option>Foggy Coast</option>
-              <option>Trail Dust</option>
-            </select>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Notifications</h3>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" checked />
-              Reminder before tours
-            </label>
-          </div>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" checked />
-              Weekly summary email
-            </label>
-          </div>
-          <div class="field">
-            <label class="check">
-              <input type="checkbox" />
-              New trail recommendations
-            </label>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Security</h3>
-          <div class="field">
-            <label for="security">Two-factor auth</label>
-            <select id="security">
-              <option>Disabled</option>
-              <option>SMS</option>
-              <option>Authenticator app</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="ghost" type="button">Reset password</button>
-            <button class="outline" type="button">Logout</button>
-          </div>
-        </div>
-      </div>
-      </section>
-      </div>
+    </section>
+  </section>
 
   <footer class="footer">Wireframe only. All controls are clickable but not functional.</footer>
-  </div>
+</div>
