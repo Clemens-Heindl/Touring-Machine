@@ -1,12 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { TourListComponent } from './components/tour-list/tour-list.component';
+import { TourDetailsComponent } from './components/tour-details/tour-details.component';
+import { TourLogListComponent } from './components/tour-log-list/tour-log-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    NavbarComponent,
+    TourListComponent,
+    TourDetailsComponent,
+    TourLogListComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class AppComponent {
+  title = 'frontend';
 }

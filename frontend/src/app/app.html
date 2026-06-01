@@ -1,133 +1,15 @@
-<div class="app-shell">
-  <input class="view-toggle" type="radio" id="view-login" name="view" checked />
-  <input class="view-toggle" type="radio" id="view-main" name="view" />
-
-  <section class="panel panel-login" aria-label="Login">
-    <div class="login-wrap">
-      <div class="card login-card">
-        <div class="brand">
-          <div class="logo">TM</div>
-          <div>
-            <p class="brand-title">Touring Machine</p>
-            <p class="brand-subtitle">Wireframe login</p>
-            </div>
-            </div>
-        <h1>Welcome back</h1>
-        <p class="lead">No credentials needed. Log in to enter the wireframe.</p>
-        <div class="field">
-          <label for="login-email">Email</label>
-          <input id="login-email" type="email" placeholder="you@example.com" />
-        </div>
-        <div class="field">
-          <label for="login-password">Password</label>
-          <input id="login-password" type="password" placeholder="Password" />
-        </div>
-        <div class="button-row">
-          <label class="button-label primary" for="view-main">Log in</label>
-          <label class="button-label ghost" for="view-main">Continue without login</label>
-        </div>
-        <p class="hint">Log in always enters the main page, even if fields are empty.</p>
+<div class="app-container">
+  <app-header></app-header>
+  <div class="main-content">
+    <app-navbar></app-navbar>
+    <main class="content-area">
+      <div class="left-panel">
+        <app-tour-list></app-tour-list>
       </div>
+      <div class="right-panel">
+        <app-tour-details></app-tour-details>
+        <app-tour-log-list></app-tour-log-list>
+      </div>
+    </main>
     </div>
-  </section>
-
-  <section class="panel panel-main" aria-label="Main">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">TM</div>
-        <div>
-          <p class="brand-title">Touring Machine</p>
-          <p class="brand-subtitle">Simple wireframe view</p>
-        </div>
-      </div>
-      <div class="top-actions">
-        <button class="ghost">New tour</button>
-        <label class="button-label outline" for="view-login">Log out</label>
-      </div>
-    </header>
-
-    <section class="main-grid">
-      <div class="card map-card">
-        <h2>Route map</h2>
-        <div class="map-placeholder map-hero">Leaflet map placeholder</div>
-        <div class="map-controls">
-          <button class="ghost">Plan route</button>
-          <button class="ghost">Zoom to fit</button>
-          </div>
-          </div>
-          <div class="card">
-        <h3>Tour list</h3>
-        <ul class="list">
-          <li class="list-item is-active">
-            <div>
-              <p class="item-title">River Loop Ride</p>
-              <p class="item-meta">Bike - Harbor Park to Quarry Bend</p>
-            </div>
-            <button class="ghost">Open</button>
-            </li>
-            <li class="list-item">
-              <div>
-                <p class="item-title">Alpine Day Hike</p>
-                <p class="item-meta">Hike - Summit Lot to Blue Ridge</p>
-              </div>
-            <button class="ghost">Open</button>
-            </li>
-            <li class="list-item">
-              <div>
-                <p class="item-title">Coastal Vacation</p>
-                <p class="item-meta">Vacation - 5 day loop</p>
-              </div>
-            <button class="ghost">Open</button>
-            </li>
-            </ul>
-      </div>
-      </section>
-
-    <section class="detail-grid-simple">
-      <div class="card">
-        <h3>Selected tour</h3>
-        <div class="spec-grid">
-          <div class="spec">
-            <span class="spec-label">From</span>
-            <strong>Harbor Park</strong>
-          </div>
-          <div class="spec">
-            <span class="spec-label">To</span>
-            <strong>Quarry Bend</strong>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Distance</span>
-              <strong>38 km</strong>
-            </div>
-            <div class="spec">
-              <span class="spec-label">Estimated time</span>
-              <strong>2h 10m</strong>
-            </div>
-        </div>
-        <div class="button-row">
-          <button class="primary">Edit tour</button>
-          <button class="ghost">Add log</button>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Recent logs</h3>
-        <div class="log-row">
-          <div>
-            <p class="item-title">Sunny ride</p>
-            <p class="item-meta">Apr 26 - 38 km - Rating 4 / 5</p>
-          </div>
-          <button class="ghost">View</button>
-        </div>
-        <div class="log-row">
-          <div>
-            <p class="item-title">Windy loop</p>
-            <p class="item-meta">Apr 12 - 40 km - Rating 3 / 5</p>
-            </div>
-          <button class="ghost">View</button>
-        </div>
-      </div>
-    </section>
-  </section>
-
-  <footer class="footer">Wireframe only. All controls are clickable but not functional.</footer>
 </div>
