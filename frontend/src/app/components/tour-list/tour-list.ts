@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
 import { TourStateService } from '../../services/tour-state.service';
 import { CommonModule } from '@angular/common';
-import { Tour } from '../../models/tour.model';
+import { Tour, TourFormValue } from '../../models/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
 
 @Component({
@@ -13,8 +13,11 @@ import { TourFormComponent } from '../tour-form/tour-form.component';
   styleUrls: ['./tour-list.css']
 })
 export class TourListComponent implements OnInit {
+  showForm = false;
+  editingTour: Tour | null = null;
+
   get tours() {
-    return this.tourState.tours$;
+    return this.tourState.filteredTours$;
   }
 
   get selectedTour() {
@@ -27,8 +30,14 @@ export class TourListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.tourService.getTours().subscribe(tours => {
-      this.tourState.setTours(tours);
+    this.tourState.setApiStatus('Loading tours from the ASP.NET API...');
+    this.tourService.getTours().subscribe({
+      next: tours => {
+        this.tourState.setTours(tours);
+      },
+      error: () => {
+        this.tourState.setApiStatus('API is not reachable. You can still use the local demo data.');
+      }
     });
   }
 
@@ -36,13 +45,76 @@ export class TourListComponent implements OnInit {
     this.tourState.setSelectedTour(tour);
   }
 
+  startCreateTour() {
+    this.editingTour = null;
+    this.showForm = true;
+  }
+
+  startEditTour(tour: Tour, event: MouseEvent) {
+    event.stopPropagation();
+    this.editingTour = tour;
+    this.showForm = true;
+  }
+
+  saveTour(formValue: TourFormValue) {
+    if (this.editingTour) {
+      const updatedTour = { ...this.editingTour, ...formValue };
+
+      this.tourService.updateTour(updatedTour.id, { ...formValue, id: updatedTour.id }).subscribe({
+        next: () => {
+          this.tourState.updateTour(updatedTour);
+          this.closeForm('Tour updated.');
+        },
+        error: () => {
+          this.tourState.updateTour(updatedTour);
+          this.closeForm('Tour updated locally. Start the API to persist changes.');
+        }
+      });
+      return;
+    }
+
+    const draftTour: Partial<Tour> = { ...formValue, logs: [] };
+    this.tourService.createTour(draftTour).subscribe({
+      next: newTour => {
+        this.tourState.addTour({ ...draftTour, ...newTour, imageUrl: newTour.imageUrl || formValue.imageUrl });
+        this.closeForm('Tour created.');
+      },
+      error: () => {
+        this.tourState.addTour(draftTour);
+        this.closeForm('Tour created locally. Start the API to persist changes.');
+      }
+    });
+  }
+
+  cancelForm() {
+    this.showForm = false;
+    this.editingTour = null;
+  }
+
   deleteTour(tourId: number, event: MouseEvent) {
-    event.stopPropagation(); // Prevent tour selection
+    event.stopPropagation();
     if (confirm('Are you sure you want to delete this tour?')) {
-      this.tourService.deleteTour(tourId).subscribe(() => {
-        this.tourState.deleteTour(tourId);
+      this.tourService.deleteTour(tourId).subscribe({
+        next: () => {
+          this.tourState.deleteTour(tourId);
+          this.tourState.setApiStatus('Tour deleted.');
+        },
+        error: () => {
+          this.tourState.deleteTour(tourId);
+          this.tourState.setApiStatus('Tour deleted locally. Start the API to persist changes.');
+        }
       });
     }
+  }
+
+  trackTour(_index: number, tour: Tour): number {
+    return tour.id;
+  }
+
+  private closeForm(message: string) {
+    this.showForm = false;
+    this.editingTour = null;
+    this.tourState.setApiStatus(message);
   }
 }
 

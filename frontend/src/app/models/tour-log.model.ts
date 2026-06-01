@@ -1,10 +1,12 @@
 export interface TourLog {
     id: number;
-    dateTime: string; // Assuming string format from backend
-    comment?: string;
+    dateTime: string;
+    comment: string;
     difficulty: number;
     totalDistance: number;
-    totalTime: string; // Assuming string format from backend
+    totalTime: string;
     rating: number;
     tourId: number;
 }
+
+export type TourLogFormValue = Omit<TourLog, 'id' | 'tourId'>;

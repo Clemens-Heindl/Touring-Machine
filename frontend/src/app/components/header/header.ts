@@ -1,9 +1,18 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { TourStateService } from '../../services/tour-state.service';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header {}
+export class Header {
+  constructor(public tourState: TourStateService) { }
+
+  updateSearch(term: string) {
+    this.tourState.setSearchTerm(term);
+  }
+}

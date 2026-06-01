@@ -14,6 +14,6 @@ export class TourDetailsComponent {
     return this.tourState.selectedTour$;
   }
 
-  constructor(private tourState: TourStateService) { }
+  constructor(public tourState: TourStateService) { }
 }
 

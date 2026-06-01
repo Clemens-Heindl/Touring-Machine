@@ -1,15 +1,13 @@
 <div class="app-container">
   <app-header></app-header>
-  <div class="main-content">
+  <div class="workspace">
     <app-navbar></app-navbar>
     <main class="content-area">
-      <div class="left-panel">
-        <app-tour-list></app-tour-list>
-      </div>
-      <div class="right-panel">
+      <app-tour-list></app-tour-list>
+      <section class="inspector-column" aria-label="Tour details and logs">
         <app-tour-details></app-tour-details>
         <app-tour-log-list></app-tour-log-list>
-      </div>
+      </section>
     </main>
-    </div>
+  </div>
 </div>
