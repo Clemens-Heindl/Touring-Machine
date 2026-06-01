@@ -5,6 +5,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { TourListComponent } from './components/tour-list/tour-list.component';
 import { TourDetailsComponent } from './components/tour-details/tour-details.component';
 import { TourLogListComponent } from './components/tour-log-list/tour-log-list.component';
+import { TourFormComponent } from './components/tour-form/tour-form.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ import { TourLogListComponent } from './components/tour-log-list/tour-log-list.c
     NavbarComponent,
     TourListComponent,
     TourDetailsComponent,
-    TourLogListComponent
+    TourLogListComponent,
+    TourFormComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
