@@ -10,7 +10,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./tour-details.css']
 })
 export class TourDetailsComponent {
-  selectedTour = this.tourState.selectedTour$;
+  get selectedTour() {
+    return this.tourState.selectedTour$;
+  }
 
   constructor(private tourState: TourStateService) { }
 }

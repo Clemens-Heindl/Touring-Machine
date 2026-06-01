@@ -13,7 +13,9 @@ import { TourLog } from '../../models/tour-log.model';
   styleUrls: ['./tour-log-list.css']
 })
 export class TourLogListComponent {
-  selectedTour = this.tourState.selectedTour$;
+  get selectedTour() {
+    return this.tourState.selectedTour$;
+  }
 
   constructor(
     private tourState: TourStateService,

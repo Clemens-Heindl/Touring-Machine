@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TourLogService } from '../../services/tour-log.service';
 import { TourStateService } from '../../services/tour-state.service';
@@ -29,7 +29,9 @@ export class TourLogFormComponent {
       rating: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
     });
 
-    this.tourState.selectedTour$().subscribe(tour => {
+    // Use effect to watch for selected tour changes
+    effect(() => {
+      const tour = this.tourState.selectedTour$();
       this.selectedTourId = tour ? tour.id : null;
     });
   }

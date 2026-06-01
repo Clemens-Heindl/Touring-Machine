@@ -13,8 +13,13 @@ import { TourFormComponent } from '../tour-form/tour-form.component';
   styleUrls: ['./tour-list.css']
 })
 export class TourListComponent implements OnInit {
-  tours = this.tourState.tours$;
-  selectedTour = this.tourState.selectedTour$;
+  get tours() {
+    return this.tourState.tours$;
+  }
+
+  get selectedTour() {
+    return this.tourState.selectedTour$;
+  }
 
   constructor(
     private tourService: TourService,
