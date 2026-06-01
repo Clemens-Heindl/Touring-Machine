@@ -1,0 +1,11 @@
+<div class="form-container" *ngIf="selectedTourId !== null">
+  <h4>Add Log for {{ tourState.selectedTour$()?.name }}</h4>
+  <form [formGroup]="logForm" (ngSubmit)="onSubmit()">
+    <input formControlName="comment" placeholder="Comment">
+    <input type="number" formControlName="difficulty" placeholder="Difficulty (1-5)">
+    <input type="number" formControlName="totalDistance" placeholder="Distance (km)">
+    <input formControlName="totalTime" placeholder="Time (hh:mm:ss)">
+    <input type="number" formControlName="rating" placeholder="Rating (1-5)">
+    <button type="submit" [disabled]="logForm.invalid">Add Log</button>
+  </form>
+</div>

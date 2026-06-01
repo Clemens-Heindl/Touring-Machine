@@ -1,19 +1,16 @@
-<div class="tour-details-container">
-    <h2>Tour Details: Vienna City Walk</h2>
+<div class="tour-details-container" *ngIf="selectedTour() as tour">
+    <h2>Tour Details: {{ tour.name }}</h2>
     <div class="tour-meta">
-        <span><strong>From:</strong> St. Stephen's Cathedral</span>
-        <span><strong>To:</strong> Hofburg Palace</span>
-        <span><strong>Distance:</strong> 5 km</span>
-        <span><strong>Transport:</strong> Walking</span>
+    <span><strong>From:</strong> {{ tour.from }}</span>
+    <span><strong>To:</strong> {{ tour.to }}</span>
+    <span><strong>Distance:</strong> {{ tour.distance }} km</span>
+    <span><strong>Transport:</strong> {{ tour.transportType }}</span>
     </div>
-    <p class="tour-description">
-        This tour takes you through the heart of Vienna, showcasing its stunning architecture and rich history. You will
-        see iconic landmarks and hidden gems.
-    </p>
-    <div class="map-container">
-        <!-- Placeholder for Leaflet Map -->
-        <div class="map-placeholder">
-            <p>Map of the tour will be displayed here.</p>
-        </div>
+<p class="tour-description">{{ tour.description }}</p>
+<div class="map-container">
+    <div class="map-placeholder">
+        <p>Map of the tour will be displayed here.</p>
+    </div>
     </div>
 </div>
+

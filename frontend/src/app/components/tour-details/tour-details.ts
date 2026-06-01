@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
+import { TourStateService } from '../../services/tour-state.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tour-details',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './tour-details.html',
-  styleUrl: './tour-details.css',
+  styleUrls: ['./tour-details.css']
 })
-export class TourDetails {}
+export class TourDetailsComponent {
+  selectedTour = this.tourState.selectedTour$;
+
+  constructor(private tourState: TourStateService) { }
+}
+

@@ -1,0 +1,11 @@
+<div class="form-container">
+  <h3>Create New Tour</h3>
+  <form [formGroup]="tourForm" (ngSubmit)="onSubmit()">
+    <input formControlName="name" placeholder="Tour Name">
+    <input formControlName="description" placeholder="Description">
+    <input formControlName="from" placeholder="From">
+    <input formControlName="to" placeholder="To">
+    <input formControlName="transportType" placeholder="Transport Type">
+    <button type="submit" [disabled]="tourForm.invalid">Create Tour</button>
+  </form>
+</div>
