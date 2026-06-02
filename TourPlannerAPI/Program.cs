@@ -22,6 +22,13 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// Auto-apply migrations on startup so a fresh container is ready immediately
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TourPlannerDbContext>();
+    db.Database.Migrate();
+}
+
 app.UseHttpsRedirection();
 
 app.UseCors(AngularCorsPolicy);
