@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
 
 @Component({
   selector: 'app-tour-log-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './tour-log-form.component.html',
   styleUrls: ['./tour-log-form.component.css']
 })

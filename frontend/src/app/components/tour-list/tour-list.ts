@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
 import { TourStateService } from '../../services/tour-state.service';
-import { CommonModule } from '@angular/common';
+
 import { Tour, TourFormValue } from '../../models/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
 
 @Component({
   selector: 'app-tour-list',
   standalone: true,
-  imports: [CommonModule, TourFormComponent],
+  imports: [TourFormComponent],
   templateUrl: './tour-list.html',
   styleUrls: ['./tour-list.css']
 })

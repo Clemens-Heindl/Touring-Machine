@@ -1,4 +1,5 @@
-<section class="tour-details-container" *ngIf="selectedTour() as tour; else selectTourPrompt">
+@if (selectedTour(); as tour) {
+<section class="tour-details-container">
     <div class="detail-hero">
         <img [src]="tour.imageUrl" [alt]="tour.name + ' image'">
         <div>
@@ -7,26 +8,25 @@
             <p>{{ tour.description }}</p>
         </div>
     </div>
-<div class="detail-grid">
-    <div><span>From</span><strong>{{ tour.from }}</strong></div>
-    <div><span>To</span><strong>{{ tour.to }}</strong></div>
-    <div><span>Transport</span><strong>{{ tour.transportType }}</strong></div>
-    <div><span>Distance</span><strong>{{ tour.distance }} km</strong></div>
-    <div><span>Estimated time</span><strong>{{ tour.estimatedTime }}</strong></div>
-    <div><span>Popularity</span><strong>{{ tourState.getPopularity(tour) }}</strong></div>
-    <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
-    <div><span>Image</span><strong>Stored as URL</strong></div>
+    <div class="detail-grid">
+        <div><span>From</span><strong>{{ tour.from }}</strong></div>
+        <div><span>To</span><strong>{{ tour.to }}</strong></div>
+        <div><span>Transport</span><strong>{{ tour.transportType }}</strong></div>
+        <div><span>Distance</span><strong>{{ tour.distance }} km</strong></div>
+        <div><span>Estimated time</span><strong>{{ tour.estimatedTime }}</strong></div>
+        <div><span>Popularity</span><strong>{{ tourState.getPopularity(tour) }}</strong></div>
+        <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
+        <div><span>Image</span><strong>Stored as URL</strong></div>
     </div>
-<div class="map-placeholder">
-    <strong>Leaflet map placeholder</strong>
-    <span>{{ tour.routeInformation }}</span>
+    <div class="map-placeholder">
+        <strong>Leaflet map placeholder</strong>
+        <span>{{ tour.routeInformation }}</span>
     </div>
 </section>
-
-<ng-template #selectTourPrompt>
+} @else {
     <section class="empty-state">
         <h2>Select a tour</h2>
         <p>Tour attributes and the map placeholder appear here.</p>
     </section>
-</ng-template>
+}
 

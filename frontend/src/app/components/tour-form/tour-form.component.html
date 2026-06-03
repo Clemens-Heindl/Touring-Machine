@@ -7,26 +7,34 @@
   <label>
     Name
     <input formControlName="name" placeholder="River Loop Ride">
-    <span class="field-error" *ngIf="hasError('name')">Name is required.</span>
+    @if (hasError('name')) {
+    <span class="field-error">Name is required.</span>
+    }
   </label>
 
   <label>
     Description
     <textarea formControlName="description" rows="3" placeholder="Short tour description"></textarea>
-    <span class="field-error" *ngIf="hasError('description')">Description is required.</span>
+    @if (hasError('description')) {
+    <span class="field-error">Description is required.</span>
+    }
   </label>
 
   <div class="form-grid">
     <label>
       From
       <input formControlName="from" placeholder="Start location">
-      <span class="field-error" *ngIf="hasError('from')">Start location is required.</span>
+      @if (hasError('from')) {
+      <span class="field-error">Start location is required.</span>
+      }
     </label>
 
     <label>
       To
       <input formControlName="to" placeholder="Destination">
-      <span class="field-error" *ngIf="hasError('to')">Destination is required.</span>
+      @if (hasError('to')) {
+      <span class="field-error">Destination is required.</span>
+      }
     </label>
   </div>
 
@@ -34,14 +42,18 @@
     <label>
       Transport type
       <select formControlName="transportType">
-        <option *ngFor="let type of transportTypes" [value]="type">{{ type }}</option>
+        @for (type of transportTypes; track type) {
+        <option [value]="type">{{ type }}</option>
+        }
       </select>
     </label>
 
     <label>
       Distance in km
       <input type="number" min="0.1" step="0.1" formControlName="distance">
-      <span class="field-error" *ngIf="hasError('distance')">Distance must be greater than 0.</span>
+      @if (hasError('distance')) {
+      <span class="field-error">Distance must be greater than 0.</span>
+      }
     </label>
   </div>
 
@@ -49,13 +61,17 @@
     <label>
       Estimated time
       <input formControlName="estimatedTime" placeholder="02:10:00">
-      <span class="field-error" *ngIf="hasError('estimatedTime')">Use hh:mm or hh:mm:ss.</span>
+      @if (hasError('estimatedTime')) {
+      <span class="field-error">Use hh:mm or hh:mm:ss.</span>
+      }
     </label>
 
     <label>
       Image URL
       <input formControlName="imageUrl" placeholder="https://example.com/tour.jpg">
-      <span class="field-error" *ngIf="hasError('imageUrl')">Image URL is required.</span>
+      @if (hasError('imageUrl')) {
+      <span class="field-error">Image URL is required.</span>
+      }
     </label>
   </div>
 
@@ -63,11 +79,15 @@
     Route information
     <textarea formControlName="routeInformation" rows="2"
       placeholder="Harbor Park -> River Trail -> Quarry Bend"></textarea>
-    <span class="field-error" *ngIf="hasError('routeInformation')">Route information is required.</span>
+    @if (hasError('routeInformation')) {
+    <span class="field-error">Route information is required.</span>
+    }
   </label>
 
   <div class="button-row">
     <button type="submit" class="primary-btn">{{ isEditing ? 'Save tour' : 'Create tour' }}</button>
-    <button type="button" class="secondary-btn" *ngIf="isEditing" (click)="cancel()">Cancel</button>
+    @if (isEditing) {
+    <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
+    }
   </div>
 </form>

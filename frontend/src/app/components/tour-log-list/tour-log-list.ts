@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TourStateService } from '../../services/tour-state.service';
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { TourLogFormComponent } from '../tour-log-form/tour-log-form.component';
 import { TourLogService } from '../../services/tour-log.service';
 import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
@@ -8,7 +8,7 @@ import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
 @Component({
   selector: 'app-tour-log-list',
   standalone: true,
-  imports: [CommonModule, TourLogFormComponent],
+  imports: [DatePipe, TourLogFormComponent],
   templateUrl: './tour-log-list.html',
   styleUrls: ['./tour-log-list.css']
 })

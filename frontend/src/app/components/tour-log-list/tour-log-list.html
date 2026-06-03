@@ -1,4 +1,5 @@
-<section class="tour-logs-container" *ngIf="selectedTour() as tour">
+@if (selectedTour(); as tour) {
+<section class="tour-logs-container">
   <div class="panel-heading">
     <div>
       <p class="eyebrow">Tour logs</p>
@@ -7,31 +8,36 @@
     <button type="button" class="primary-btn" (click)="startCreateLog()">New log</button>
   </div>
 
-  <app-tour-log-form *ngIf="showForm" [log]="editingLog" (saveLog)="saveLog($event)"
-    (cancelEdit)="cancelLogForm()"></app-tour-log-form>
+    @if (showForm) {
+    <app-tour-log-form [log]="editingLog" (saveLog)="saveLog($event)" (cancelEdit)="cancelLogForm()"></app-tour-log-form>
+    }
 
-  <ul class="log-list" *ngIf="tour.logs.length > 0; else noLogs">
-    <li *ngFor="let log of tour.logs; trackBy: trackLog" class="log-item">
-      <div>
-        <p class="log-date">{{ log.dateTime | date:'medium' }}</p>
-        <p>{{ log.comment }}</p>
-        <div class="pill-row">
-          <span>Difficulty {{ log.difficulty }}/5</span>
-          <span>{{ log.totalDistance }} km</span>
-          <span>{{ log.totalTime }}</span>
-          <span>Rating {{ log.rating }}/5</span>
-        </div>
+    @if (tour.logs.length > 0) {
+    <ul class="log-list">
+      @for (log of tour.logs; track log.id) {
+      <li class="log-item">
+        <div>
+          <p class="log-date">{{ log.dateTime | date:'medium' }}</p>
+          <p>{{ log.comment }}</p>
+          <div class="pill-row">
+            <span>Difficulty {{ log.difficulty }}/5</span>
+            <span>{{ log.totalDistance }} km</span>
+            <span>{{ log.totalTime }}</span>
+            <span>Rating {{ log.rating }}/5</span>
+          </div>
         </div>
         <div class="item-actions">
           <button type="button" class="secondary-btn" (click)="startEditLog(log)">Edit</button>
           <button type="button" class="danger-btn" (click)="deleteLog(log, $event)">Delete</button>
         </div>
-    </li>
-  </ul>
-<ng-template #noLogs>
-  <div class="empty-state small">
-    <h3>No logs yet</h3>
-    <p>Create the first accomplished-tour log for this tour.</p>
-  </div>
-  </ng-template>
+      </li>
+        }
+      </ul>
+    } @else {
+    <div class="empty-state small">
+      <h3>No logs yet</h3>
+      <p>Create the first accomplished-tour log for this tour.</p>
+    </div>
+    }
   </section>
+}
