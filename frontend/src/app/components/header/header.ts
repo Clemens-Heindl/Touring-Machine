@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TourStateService } from '../../services/tour-state.service';
 
@@ -10,7 +10,7 @@ import { TourStateService } from '../../services/tour-state.service';
   styleUrl: './header.css',
 })
 export class Header {
-  constructor(public tourState: TourStateService) { }
+  tourState = inject(TourStateService);
 
   updateSearch(term: string) {
     this.tourState.setSearchTerm(term);

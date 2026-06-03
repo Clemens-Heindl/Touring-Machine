@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TourLog } from '../models/tour-log.model';
@@ -8,8 +8,7 @@ import { TourLog } from '../models/tour-log.model';
 })
 export class TourLogService {
   private apiUrl = '/api';
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   createTourLog(tourId: number, log: Partial<TourLog>): Observable<TourLog> {
     return this.http.post<TourLog>(`${this.apiUrl}/tours/${tourId}/logs`, log);

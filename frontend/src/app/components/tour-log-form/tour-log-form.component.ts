@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, effect, inject, input, output } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
 
@@ -10,34 +10,33 @@ import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
   templateUrl: './tour-log-form.component.html',
   styleUrls: ['./tour-log-form.component.css']
 })
-export class TourLogFormComponent implements OnChanges {
-  @Input() log: TourLog | null = null;
-  @Output() saveLog = new EventEmitter<TourLogFormValue>();
-  @Output() cancelEdit = new EventEmitter<void>();
+export class TourLogFormComponent {
+  log = input<TourLog | null>(null);
+  saveLog = output<TourLogFormValue>();
+  cancelEdit = output<void>();
 
-  logForm: FormGroup;
   submitted = false;
   private readonly durationPattern = /^([0-9]{1,2}):[0-5][0-9](:[0-5][0-9])?$/;
+  private fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) {
-    this.logForm = this.fb.group({
-      dateTime: [this.toInputDateTime(new Date().toISOString()), Validators.required],
-      comment: ['', [Validators.required, Validators.maxLength(500)]],
-      difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-      totalDistance: [1, [Validators.required, Validators.min(0.1)]],
-      totalTime: ['01:00:00', [Validators.required, Validators.pattern(this.durationPattern)]],
-      rating: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
+  logForm = this.fb.group({
+    dateTime: [this.toInputDateTime(new Date().toISOString()), Validators.required],
+    comment: ['', [Validators.required, Validators.maxLength(500)]],
+    difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    totalDistance: [1, [Validators.required, Validators.min(0.1)]],
+    totalTime: ['01:00:00', [Validators.required, Validators.pattern(this.durationPattern)]],
+    rating: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
+  });
+
+  constructor() {
+    effect(() => {
+      this.log();
+      this.resetForm();
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['log']) {
-      this.resetForm();
-    }
-  }
-
   get isEditing(): boolean {
-    return this.log !== null;
+    return this.log() !== null;
   }
 
   onSubmit() {
@@ -77,14 +76,15 @@ export class TourLogFormComponent implements OnChanges {
   private resetForm() {
     this.submitted = false;
 
-    if (this.log) {
+    const log = this.log();
+    if (log) {
       this.logForm.reset({
-        dateTime: this.toInputDateTime(this.log.dateTime),
-        comment: this.log.comment,
-        difficulty: this.log.difficulty,
-        totalDistance: this.log.totalDistance,
-        totalTime: this.log.totalTime,
-        rating: this.log.rating
+        dateTime: this.toInputDateTime(log.dateTime),
+        comment: log.comment,
+        difficulty: log.difficulty,
+        totalDistance: log.totalDistance,
+        totalTime: log.totalTime,
+        rating: log.rating
       });
       return;
     }

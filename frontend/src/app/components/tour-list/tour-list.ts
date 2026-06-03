@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
 import { TourStateService } from '../../services/tour-state.service';
 
@@ -13,21 +13,14 @@ import { TourFormComponent } from '../tour-form/tour-form.component';
   styleUrls: ['./tour-list.css']
 })
 export class TourListComponent implements OnInit {
+  private tourService = inject(TourService);
+  tourState = inject(TourStateService);
+
+  readonly tours = this.tourState.filteredTours$;
+  readonly selectedTour = this.tourState.selectedTour$;
+
   showForm = false;
   editingTour: Tour | null = null;
-
-  get tours() {
-    return this.tourState.filteredTours$;
-  }
-
-  get selectedTour() {
-    return this.tourState.selectedTour$;
-  }
-
-  constructor(
-    private tourService: TourService,
-    public tourState: TourStateService
-  ) { }
 
   ngOnInit(): void {
     this.tourState.setApiStatus('Loading tours from the ASP.NET API...');
@@ -105,10 +98,6 @@ export class TourListComponent implements OnInit {
         }
       });
     }
-  }
-
-  trackTour(_index: number, tour: Tour): number {
-    return tour.id;
   }
 
   private closeForm(message: string) {

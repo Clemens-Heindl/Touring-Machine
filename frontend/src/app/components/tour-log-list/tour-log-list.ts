@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TourStateService } from '../../services/tour-state.service';
 import { DatePipe } from '@angular/common';
 import { TourLogFormComponent } from '../tour-log-form/tour-log-form.component';
@@ -13,17 +13,13 @@ import { TourLog, TourLogFormValue } from '../../models/tour-log.model';
   styleUrls: ['./tour-log-list.css']
 })
 export class TourLogListComponent {
+  private tourState = inject(TourStateService);
+  private logService = inject(TourLogService);
+
+  readonly selectedTour = this.tourState.selectedTour$;
+
   showForm = false;
   editingLog: TourLog | null = null;
-
-  get selectedTour() {
-    return this.tourState.selectedTour$;
-  }
-
-  constructor(
-    private tourState: TourStateService,
-    private logService: TourLogService
-  ) { }
 
   startCreateLog() {
     this.editingLog = null;
@@ -90,10 +86,6 @@ export class TourLogListComponent {
         }
       });
     }
-  }
-
-  trackLog(_index: number, log: TourLog): number {
-    return log.id;
   }
 
   private closeLogForm(message: string) {

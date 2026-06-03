@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { Component, effect, inject, input, output } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Tour, TourFormValue, TransportType } from '../../models/tour.model';
 
 @Component({
@@ -10,38 +9,37 @@ import { Tour, TourFormValue, TransportType } from '../../models/tour.model';
   templateUrl: './tour-form.component.html',
   styleUrls: ['./tour-form.component.css']
 })
-export class TourFormComponent implements OnChanges {
-  @Input() tour: Tour | null = null;
-  @Output() saveTour = new EventEmitter<TourFormValue>();
-  @Output() cancelEdit = new EventEmitter<void>();
+export class TourFormComponent {
+  tour = input<Tour | null>(null);
+  saveTour = output<TourFormValue>();
+  cancelEdit = output<void>();
 
-  tourForm: FormGroup;
   submitted = false;
   readonly transportTypes: TransportType[] = ['Bike', 'Hike', 'Running', 'Vacation'];
   private readonly durationPattern = /^([0-9]{1,2}):[0-5][0-9](:[0-5][0-9])?$/;
+  private fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) {
-    this.tourForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
-      from: ['', [Validators.required, Validators.maxLength(100)]],
-      to: ['', [Validators.required, Validators.maxLength(100)]],
-      transportType: ['Bike', Validators.required],
-      distance: [1, [Validators.required, Validators.min(0.1)]],
-      estimatedTime: ['01:00:00', [Validators.required, Validators.pattern(this.durationPattern)]],
-      routeInformation: ['', [Validators.required, Validators.maxLength(500)]],
-      imageUrl: ['', Validators.required]
+  tourForm = this.fb.group({
+    name: ['', [Validators.required, Validators.maxLength(100)]],
+    description: ['', [Validators.required, Validators.maxLength(500)]],
+    from: ['', [Validators.required, Validators.maxLength(100)]],
+    to: ['', [Validators.required, Validators.maxLength(100)]],
+    transportType: ['Bike', Validators.required],
+    distance: [1, [Validators.required, Validators.min(0.1)]],
+    estimatedTime: ['01:00:00', [Validators.required, Validators.pattern(this.durationPattern)]],
+    routeInformation: ['', [Validators.required, Validators.maxLength(500)]],
+    imageUrl: ['', Validators.required]
+  });
+
+  constructor() {
+    effect(() => {
+      this.tour();
+      this.resetForm();
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['tour']) {
-      this.resetForm();
-    }
-  }
-
   get isEditing(): boolean {
-    return this.tour !== null;
+    return this.tour() !== null;
   }
 
   onSubmit() {
@@ -78,17 +76,18 @@ export class TourFormComponent implements OnChanges {
   private resetForm() {
     this.submitted = false;
 
-    if (this.tour) {
+    const tour = this.tour();
+    if (tour) {
       this.tourForm.reset({
-        name: this.tour.name,
-        description: this.tour.description,
-        from: this.tour.from,
-        to: this.tour.to,
-        transportType: this.tour.transportType,
-        distance: this.tour.distance,
-        estimatedTime: this.tour.estimatedTime,
-        routeInformation: this.tour.routeInformation,
-        imageUrl: this.tour.imageUrl
+        name: tour.name,
+        description: tour.description,
+        from: tour.from,
+        to: tour.to,
+        transportType: tour.transportType,
+        distance: tour.distance,
+        estimatedTime: tour.estimatedTime,
+        routeInformation: tour.routeInformation,
+        imageUrl: tour.imageUrl
       });
       return;
     }

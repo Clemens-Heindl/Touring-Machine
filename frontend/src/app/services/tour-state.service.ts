@@ -88,8 +88,6 @@ export class TourStateService {
     return this.tours().find(tour => tour.id === selectedId) ?? null;
   });
 
-  constructor() { }
-
   setTours(tours: Tour[]) {
     const normalizedTours = tours.map(tour => this.normalizeTour(tour));
     this.tours.set(normalizedTours);

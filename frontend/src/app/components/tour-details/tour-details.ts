@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TourStateService } from '../../services/tour-state.service';
 
 
@@ -10,10 +10,8 @@ import { TourStateService } from '../../services/tour-state.service';
   styleUrls: ['./tour-details.css']
 })
 export class TourDetailsComponent {
-  get selectedTour() {
-    return this.tourState.selectedTour$;
-  }
+  tourState = inject(TourStateService);
 
-  constructor(public tourState: TourStateService) { }
+  readonly selectedTour = this.tourState.selectedTour$;
 }
 
