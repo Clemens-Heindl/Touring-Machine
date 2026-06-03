@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tour } from '../models/tour.model';
@@ -7,9 +7,8 @@ import { Tour } from '../models/tour.model';
   providedIn: 'root'
 })
 export class TourService {
-  private apiUrl = 'https://localhost:7125/api/tours'; // Adjust port if necessary
-
-  constructor(private http: HttpClient) { }
+  private apiUrl = '/api/tours';
+  private http = inject(HttpClient);
 
   getTours(): Observable<Tour[]> {
     return this.http.get<Tour[]>(this.apiUrl);
@@ -19,11 +18,11 @@ export class TourService {
     return this.http.post<Tour>(this.apiUrl, tour);
   }
 
-  updateTour(id: number, tour: Partial<Tour>): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, tour);
+  updateTour(id: number, tour: Partial<Tour>): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, tour);
   }
 
-  deleteTour(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteTour(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

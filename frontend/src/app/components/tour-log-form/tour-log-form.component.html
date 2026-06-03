@@ -1,11 +1,63 @@
-<div class="form-container" *ngIf="selectedTourId !== null">
-  <h4>Add Log for {{ tourState.selectedTour$()?.name }}</h4>
-  <form [formGroup]="logForm" (ngSubmit)="onSubmit()">
-    <input formControlName="comment" placeholder="Comment">
-    <input type="number" formControlName="difficulty" placeholder="Difficulty (1-5)">
-    <input type="number" formControlName="totalDistance" placeholder="Distance (km)">
-    <input formControlName="totalTime" placeholder="Time (hh:mm:ss)">
-    <input type="number" formControlName="rating" placeholder="Rating (1-5)">
-    <button type="submit" [disabled]="logForm.invalid">Add Log</button>
-  </form>
-</div>
+<form class="editor-form compact" [formGroup]="logForm" (ngSubmit)="onSubmit()" novalidate>
+  <div class="form-heading">
+    <h3>{{ isEditing ? 'Edit log' : 'Create log' }}</h3>
+    <p>Every log belongs to the currently selected tour.</p>
+  </div>
+
+  <label>
+    Date and time
+    <input type="datetime-local" formControlName="dateTime">
+    @if (hasError('dateTime')) {
+    <span class="field-error">Date and time are required.</span>
+    }
+  </label>
+
+  <label>
+    Comment
+    <textarea rows="2" formControlName="comment" placeholder="How did the tour go?"></textarea>
+    @if (hasError('comment')) {
+    <span class="field-error">Comment is required.</span>
+    }
+  </label>
+
+  <div class="form-grid three">
+    <label>
+      Difficulty
+      <input type="number" min="1" max="5" formControlName="difficulty">
+      @if (hasError('difficulty')) {
+      <span class="field-error">Use 1 to 5.</span>
+      }
+    </label>
+
+    <label>
+      Distance in km
+      <input type="number" min="0.1" step="0.1" formControlName="totalDistance">
+      @if (hasError('totalDistance')) {
+      <span class="field-error">Distance must be greater than 0.</span>
+      }
+    </label>
+
+    <label>
+      Rating
+      <input type="number" min="1" max="5" formControlName="rating">
+      @if (hasError('rating')) {
+      <span class="field-error">Use 1 to 5.</span>
+      }
+    </label>
+  </div>
+
+  <label>
+    Total time
+    <input formControlName="totalTime" placeholder="02:18:00">
+    @if (hasError('totalTime')) {
+    <span class="field-error">Use hh:mm or hh:mm:ss.</span>
+    }
+  </label>
+
+  <div class="button-row">
+    <button type="submit" class="primary-btn">{{ isEditing ? 'Save log' : 'Add log' }}</button>
+    @if (isEditing) {
+    <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
+    }
+  </div>
+</form>

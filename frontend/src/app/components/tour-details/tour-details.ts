@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TourStateService } from '../../services/tour-state.service';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-tour-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './tour-details.html',
   styleUrls: ['./tour-details.css']
 })
 export class TourDetailsComponent {
-  selectedTour = this.tourState.selectedTour$;
+  tourState = inject(TourStateService);
 
-  constructor(private tourState: TourStateService) { }
+  readonly selectedTour = this.tourState.selectedTour$;
 }
 

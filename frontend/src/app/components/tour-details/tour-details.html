@@ -1,16 +1,32 @@
-<div class="tour-details-container" *ngIf="selectedTour() as tour">
-    <h2>Tour Details: {{ tour.name }}</h2>
-    <div class="tour-meta">
-    <span><strong>From:</strong> {{ tour.from }}</span>
-    <span><strong>To:</strong> {{ tour.to }}</span>
-    <span><strong>Distance:</strong> {{ tour.distance }} km</span>
-    <span><strong>Transport:</strong> {{ tour.transportType }}</span>
+@if (selectedTour(); as tour) {
+<section class="tour-details-container">
+    <div class="detail-hero">
+        <img [src]="tour.imageUrl" [alt]="tour.name + ' image'">
+        <div>
+            <p class="eyebrow">Selected tour</p>
+            <h2>{{ tour.name }}</h2>
+            <p>{{ tour.description }}</p>
+        </div>
     </div>
-<p class="tour-description">{{ tour.description }}</p>
-<div class="map-container">
+    <div class="detail-grid">
+        <div><span>From</span><strong>{{ tour.from }}</strong></div>
+        <div><span>To</span><strong>{{ tour.to }}</strong></div>
+        <div><span>Transport</span><strong>{{ tour.transportType }}</strong></div>
+        <div><span>Distance</span><strong>{{ tour.distance }} km</strong></div>
+        <div><span>Estimated time</span><strong>{{ tour.estimatedTime }}</strong></div>
+        <div><span>Popularity</span><strong>{{ tourState.getPopularity(tour) }}</strong></div>
+        <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
+        <div><span>Image</span><strong>Stored as URL</strong></div>
+    </div>
     <div class="map-placeholder">
-        <p>Map of the tour will be displayed here.</p>
+        <strong>Leaflet map placeholder</strong>
+        <span>{{ tour.routeInformation }}</span>
     </div>
-    </div>
-</div>
+</section>
+} @else {
+    <section class="empty-state">
+        <h2>Select a tour</h2>
+        <p>Tour attributes and the map placeholder appear here.</p>
+    </section>
+}
 

@@ -1,14 +1,19 @@
-import { TourLog } from "./tour-log.model";
+import { TourLog } from './tour-log.model';
+
+export type TransportType = 'Bike' | 'Hike' | 'Running' | 'Vacation';
 
 export interface Tour {
     id: number;
     name: string;
-    description?: string;
+    description: string;
     from: string;
     to: string;
-    transportType: string;
+    transportType: TransportType;
     distance: number;
-    estimatedTime: string; // Assuming string format from backend
-    routeInformation?: string;
+    estimatedTime: string;
+    routeInformation: string;
+    imageUrl: string;
     logs: TourLog[];
 }
+
+export type TourFormValue = Omit<Tour, 'id' | 'logs'>;

@@ -1,10 +1,43 @@
 <div class="tour-list-container">
-    <h2>Tours</h2>
+    <div class="panel-heading">
+        <div>
+            <p class="eyebrow">Tours</p>
+            <h2>Managed tour list</h2>
+        </div>
+        <button type="button" class="primary-btn" (click)="startCreateTour()">New tour</button>
+    </div>
+
+    <p class="status-note">{{ tourState.apiStatus() }}</p>
+
+    @if (showForm) {
+    <app-tour-form [tour]="editingTour" (saveTour)="saveTour($event)" (cancelEdit)="cancelForm()"></app-tour-form>
+    }
+
+    @if (tours().length > 0) {
     <ul class="tour-list">
-    <li *ngFor="let tour of tours()" (click)="selectTour(tour)" [class.active]="tour.id === selectedTour()?.id">
-        <h3>{{ tour.name }}</h3>
-        <p>{{ tour.description }}</p>
-        <button class="delete-btn" (click)="deleteTour(tour.id, $event)">Delete</button>
-    </li>
-    </ul>
-<app-tour-form></app-tour-form>
+        @for (tour of tours(); track tour.id) {
+        <li (click)="selectTour(tour)" [class.active]="tour.id === selectedTour()?.id" tabindex="0">
+            <img [src]="tour.imageUrl" [alt]="tour.name + ' image'">
+            <div class="tour-summary">
+                <h3>{{ tour.name }}</h3>
+                <p>{{ tour.from }} -> {{ tour.to }}</p>
+                <div class="pill-row">
+                    <span>{{ tour.transportType }}</span>
+                    <span>{{ tour.distance }} km</span>
+                    <span>{{ tourState.getPopularity(tour) }}</span>
+                </div>
+            </div>
+            <div class="item-actions">
+                <button type="button" class="secondary-btn" (click)="startEditTour(tour, $event)">Edit</button>
+                <button type="button" class="danger-btn" (click)="deleteTour(tour.id, $event)">Delete</button>
+            </div>
+                </li>
+            }
+        </ul>
+    } @else {
+    <div class="empty-state">
+        <h3>No tours found</h3>
+        <p>Create a tour or clear the search field.</p>
+    </div>
+    }
+</div>

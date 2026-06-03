@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TourLog } from '../models/tour-log.model';
@@ -7,15 +7,18 @@ import { TourLog } from '../models/tour-log.model';
   providedIn: 'root'
 })
 export class TourLogService {
-  private apiUrl = 'https://localhost:7125/api'; // Adjust port if necessary
-
-  constructor(private http: HttpClient) { }
+  private apiUrl = '/api';
+  private http = inject(HttpClient);
 
   createTourLog(tourId: number, log: Partial<TourLog>): Observable<TourLog> {
     return this.http.post<TourLog>(`${this.apiUrl}/tours/${tourId}/logs`, log);
   }
 
-  deleteTourLog(logId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/logs/${logId}`);
+  updateTourLog(logId: number, log: Partial<TourLog>): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/logs/${logId}`, log);
+  }
+
+  deleteTourLog(logId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/logs/${logId}`);
   }
 }
