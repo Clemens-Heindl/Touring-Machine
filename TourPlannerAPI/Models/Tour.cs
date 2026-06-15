@@ -36,5 +36,12 @@ namespace TourPlannerAPI.Models
 
         [NotMapped]
         public ICollection<TourLog> Logs { get; set; } = new List<TourLog>();
+
+        [Required]
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        [JsonIgnore]
+        public User? User { get; set; }
     }
 }
