@@ -73,6 +73,22 @@ export class TourLogFormComponent {
     return !!control && control.invalid && this.submitted;
   }
 
+  get difficultyValue(): number {
+    return Number(this.logForm.get('difficulty')?.value ?? 0);
+  }
+
+  get ratingValue(): number {
+    return Number(this.logForm.get('rating')?.value ?? 0);
+  }
+
+  setDifficulty(value: number): void {
+    this.logForm.get('difficulty')?.setValue(value);
+  }
+
+  setRating(value: number): void {
+    this.logForm.get('rating')?.setValue(value);
+  }
+
   private resetForm() {
     this.submitted = false;
 

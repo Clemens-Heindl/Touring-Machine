@@ -1,14 +1,15 @@
 <form class="editor-form" [formGroup]="tourForm" (ngSubmit)="onSubmit()" novalidate>
+
   <div class="form-heading">
-    <h3>{{ isEditing ? 'Edit tour' : 'Create tour' }}</h3>
-    <p>All tour attributes are bound to the Angular view model.</p>
+    <span class="eyebrow">{{ isEditing ? 'Editing tour' : 'New tour' }}</span>
+    <h3>{{ isEditing ? 'Edit tour details' : 'Create a tour' }}</h3>
   </div>
 
   <label>
     Name
-    <input formControlName="name" placeholder="River Loop Ride">
+    <input formControlName="name" placeholder="River Loop Ride" autocomplete="off">
     @if (hasError('name')) {
-    <span class="field-error">Name is required.</span>
+      <span class="field-error">Name is required.</span>
     }
   </label>
 
@@ -16,61 +17,56 @@
     Description
     <textarea formControlName="description" rows="3" placeholder="Short tour description"></textarea>
     @if (hasError('description')) {
-    <span class="field-error">Description is required.</span>
+      <span class="field-error">Description is required.</span>
     }
   </label>
 
-  <div class="form-grid">
+  <div class="form-grid two-columns">
     <label>
       From
-      <input formControlName="from" placeholder="Start location">
+      <input formControlName="from" placeholder="Start location" autocomplete="off">
       @if (hasError('from')) {
-      <span class="field-error">Start location is required.</span>
+        <span class="field-error">Start location is required.</span>
       }
     </label>
 
     <label>
       To
-      <input formControlName="to" placeholder="Destination">
+      <input formControlName="to" placeholder="Destination" autocomplete="off">
       @if (hasError('to')) {
-      <span class="field-error">Destination is required.</span>
+        <span class="field-error">Destination is required.</span>
       }
     </label>
   </div>
 
-  <div class="form-grid">
-    <label>
-      Transport type
-      <select formControlName="transportType">
-        @for (type of transportTypes; track type) {
-        <option [value]="type">{{ type }}</option>
-        }
-      </select>
-    </label>
+  <div class="form-block">
+    <span class="block-label">Transport type</span>
+    <div class="transport-pill-group" role="group" aria-label="Transport type">
+      @for (type of transportTypes; track type) {
+        <label class="transport-pill" [class.active]="tourForm.get('transportType')?.value === type">
+          <input type="radio" formControlName="transportType" [value]="type">
+          {{ type }}
+        </label>
+      }
+    </div>
+  </div>
 
+  <div class="form-grid two-columns">
     <label>
-      Distance in km
+      Distance (km)
       <input type="number" min="0.1" step="0.1" formControlName="distance">
       @if (hasError('distance')) {
-      <span class="field-error">Distance must be greater than 0.</span>
+        <span class="field-error">Distance must be greater than 0.</span>
       }
     </label>
-  </div>
 
-  <div class="form-grid">
     <label>
       Estimated time
       <input formControlName="estimatedTime" placeholder="02:10:00">
       @if (hasError('estimatedTime')) {
-      <span class="field-error">Use hh:mm or hh:mm:ss.</span>
-      }
-    </label>
-
-    <label>
-      Image URL
-      <input formControlName="imageUrl" placeholder="https://example.com/tour.jpg">
-      @if (hasError('imageUrl')) {
-      <span class="field-error">Image URL is required.</span>
+        <span class="field-error">Use hh:mm or hh:mm:ss.</span>
+      } @else {
+        <span class="field-hint">Format: hh:mm or hh:mm:ss</span>
       }
     </label>
   </div>
@@ -78,16 +74,25 @@
   <label>
     Route information
     <textarea formControlName="routeInformation" rows="2"
-      placeholder="Harbor Park -> River Trail -> Quarry Bend"></textarea>
+      placeholder="Harbor Park → River Trail → Quarry Bend"></textarea>
     @if (hasError('routeInformation')) {
-    <span class="field-error">Route information is required.</span>
+      <span class="field-error">Route information is required.</span>
     }
   </label>
 
-  <div class="button-row">
+  <label>
+    Image URL
+    <input formControlName="imageUrl" placeholder="https://example.com/tour.jpg">
+    @if (hasError('imageUrl')) {
+      <span class="field-error">Image URL is required.</span>
+    }
+  </label>
+
+  <div class="button-row form-actions">
     <button type="submit" class="primary-btn">{{ isEditing ? 'Save tour' : 'Create tour' }}</button>
     @if (isEditing) {
-    <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
+      <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
     }
   </div>
+
 </form>
