@@ -375,3 +375,199 @@ body {
             grid-template-columns: 1fr;
         }
 }
+/* ── Editor form ─────────────────────────────────────────────── */
+
+.editor-form {
+    display: grid;
+    gap: 16px;
+}
+
+.editor-form input,
+.editor-form select,
+.editor-form textarea {
+    width: 100%;
+    border: 1.5px solid #cfc5b3;
+    border-radius: 8px;
+    background: #fffefa;
+    color: #18201b;
+    padding: 10px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.editor-form label {
+    display: grid;
+    gap: 6px;
+    color: #4d453a;
+    font-size: 0.84rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+/* Focus ring */
+.search-bar input:focus,
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus,
+.editor-form input:focus,
+.editor-form select:focus,
+.editor-form textarea:focus {
+    outline: none;
+    border-color: #0b6f5b;
+    box-shadow: 0 0 0 3px rgba(11, 111, 91, 0.14);
+}
+
+/* Inline validation error tint */
+.editor-form input.ng-invalid.ng-touched,
+.editor-form select.ng-invalid.ng-touched,
+.editor-form textarea.ng-invalid.ng-touched {
+    border-color: #c0412b;
+    background: #fff8f7;
+}
+
+/* Field messages */
+.field-error {
+    display: block;
+    color: #a13822;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.field-hint {
+    font-size: 0.78rem;
+    color: #8a7e70;
+    font-weight: 400;
+}
+
+/* Form heading */
+.editor-form .form-heading {
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e8e2d8;
+}
+
+.editor-form .form-heading h3 {
+    font-family: "Cambria", "Georgia", serif;
+    font-size: 1.1rem;
+    margin-top: 3px;
+}
+
+/* Actions row */
+.form-actions {
+    padding-top: 6px;
+    border-top: 1px solid #e8e2d8;
+}
+
+/* Remove number spinner arrows */
+.editor-form input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.editor-form input[type="number"]::-webkit-outer-spin-button,
+.editor-form input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* ── Transport type pill selector ────────────────────────────── */
+
+.form-block {
+    display: grid;
+    gap: 8px;
+}
+
+.block-label {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: #4d453a;
+    letter-spacing: 0.01em;
+}
+
+.transport-pill-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.transport-pill-group input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.transport-pill-group .transport-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 18px;
+    border: 1.5px solid #cfc5b3;
+    border-radius: 999px;
+    background: #fffefa;
+    color: #494238;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.transport-pill-group .transport-pill:hover {
+    border-color: #7ca99b;
+    background: #f0ede5;
+}
+
+.transport-pill-group .transport-pill.active {
+    background: #0b6f5b;
+    border-color: #0b6f5b;
+    color: white;
+}
+
+/* ── Star rating widget ──────────────────────────────────────── */
+
+.star-group {
+    display: grid;
+    gap: 6px;
+}
+
+.star-group-label {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: #4d453a;
+    letter-spacing: 0.01em;
+}
+
+.star-rater {
+    display: flex;
+    gap: 2px;
+}
+
+.star-btn {
+    background: none;
+    border: none;
+    padding: 3px 2px;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #d8cfc4;
+    cursor: pointer;
+    transition: color 0.1s, transform 0.1s;
+}
+
+.star-btn:hover {
+    transform: scale(1.15);
+    color: #c97a3a;
+}
+
+.star-btn.filled {
+    color: #b85f2c;
+}
+
+.star-count {
+    font-size: 0.78rem;
+    color: #8a7e70;
+    font-weight: 700;
+}
+
+@media (max-width: 620px) {
+    .transport-pill-group {
+        gap: 6px;
+    }
+}
