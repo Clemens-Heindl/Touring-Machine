@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TourPlannerAPI.Models
 {
@@ -31,6 +32,7 @@ namespace TourPlannerAPI.Models
         public int TourId { get; set; }
 
         [ForeignKey("TourId")]
+        [JsonIgnore]
         public Tour? Tour { get; set; }
     }
 }
