@@ -34,6 +34,7 @@ namespace TourPlannerAPI.Models
 
         public string? RouteInformation { get; set; } // Could store GeoJSON or similar
 
+        [NotMapped]
         public ICollection<TourLog> Logs { get; set; } = new List<TourLog>();
     }
 }
