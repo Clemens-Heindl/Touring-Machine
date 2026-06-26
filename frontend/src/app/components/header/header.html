@@ -12,7 +12,16 @@
             [ngModel]="tourState.searchTerm$()" (ngModelChange)="updateSearch($event)" />
     </div>
     <div class="user-actions">
-        <button type="button" class="secondary-btn">Import</button>
-        <button type="button" class="secondary-btn">Export</button>
+        <div class="user-box" [hidden]="!isLoggedIn">
+            <span class="user-label">Signed in as {{ userState.currentUser$()?.name }}</span>
+            <button type="button" class="secondary-btn" (click)="logout()">Logout</button>
+        </div>
+        <div class="auth-buttons" [hidden]="isLoggedIn">
+            <button type="button" class="secondary-btn" (click)="openLogin()">Login</button>
+            <button type="button" class="secondary-btn" (click)="openRegister()">Register</button>
+        </div>
+    </div>
+    <div class="login-panel" [hidden]="!showAuthPanel || isLoggedIn">
+      <app-login [mode]="authMode"></app-login>
     </div>
 </header>

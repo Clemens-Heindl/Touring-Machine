@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourPlannerAPI.Data;
 using TourPlannerAPI.Models;
+using TourPlannerAPI.Utilities;
 
 namespace TourPlannerAPI.Controllers
 {
@@ -72,6 +73,11 @@ namespace TourPlannerAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            if (!string.IsNullOrWhiteSpace(user.PasswordHash))
+            {
+                user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
+            }
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -102,10 +108,10 @@ namespace TourPlannerAPI.Controllers
             {
                 return NotFound(false);
             }
-            bool isValidLogin = existingUser.PasswordHash == user.PasswordHash;
+
+            var isValidLogin = PasswordHelper.VerifyPassword(user.PasswordHash, existingUser.PasswordHash);
             return Ok(isValidLogin);
         }
-
 
         // Helper method to check if a user exists
 

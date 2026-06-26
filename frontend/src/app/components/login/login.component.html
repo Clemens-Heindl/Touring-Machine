@@ -1,0 +1,17 @@
+<section class="login-card">
+  <h2>{{ isRegisterMode ? 'Create account' : 'Sign in' }}</h2>
+  <label for="name" [hidden]="!isRegisterMode">Name</label>
+  <input id="name" type="text" [hidden]="!isRegisterMode" [(ngModel)]="name" placeholder="Your name" />
+
+  <label for="email">Email</label>
+  <input id="email" type="email" [(ngModel)]="email" placeholder="user@example.com" />
+
+  <label for="password">Password</label>
+  <input id="password" type="password" [(ngModel)]="password" placeholder="Enter your password" />
+
+  <button type="button" class="primary-btn" (click)="submit()" [disabled]="isLoading">
+    {{ isLoading ? (isRegisterMode ? 'Creating account...' : 'Signing in...') : (isRegisterMode ? 'Create account' : 'Sign in') }}
+  </button>
+
+  <p class="error-message" [hidden]="!errorMessage">{{ errorMessage }}</p>
+</section>

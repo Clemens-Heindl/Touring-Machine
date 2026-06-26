@@ -11,14 +11,14 @@ namespace TourPlannerAPI.Models
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(50)]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(100)]
-        public string PasswordHash { get; set; } 
+        public string PasswordHash { get; set; } = string.Empty;
     }
 }

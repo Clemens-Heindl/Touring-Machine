@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Header } from './components/header/header';
 import { Navbar } from './components/navbar/navbar';
 import { TourListComponent } from './components/tour-list/tour-list';
 import { TourDetailsComponent } from './components/tour-details/tour-details';
 import { TourLogListComponent } from './components/tour-log-list/tour-log-list';
+import { UserStateService } from './services/user-state.service';
 
 @Component({
   selector: 'app-root',
@@ -20,4 +21,9 @@ import { TourLogListComponent } from './components/tour-log-list/tour-log-list';
 })
 export class AppComponent {
   title = 'frontend';
+  private readonly userState = inject(UserStateService);
+
+  get isAuthenticated() {
+    return this.userState.isAuthenticated$();
+  }
 }
