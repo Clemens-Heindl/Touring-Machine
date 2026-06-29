@@ -96,16 +96,25 @@ namespace TourPlannerAPI.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<bool>> Login(string email, string passwordHash)
+        public async Task<ActionResult<User>> Login(string email, string passwordHash)
         {
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (existingUser == null || string.IsNullOrWhiteSpace(passwordHash))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(passwordHash))
             {
-                return Ok(false);
+                return Unauthorized();
             }
 
-            var isValidLogin = PasswordHelper.VerifyPassword(passwordHash, existingUser.PasswordHash);
-            return Ok(isValidLogin);
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (existingUser == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!PasswordHelper.VerifyPassword(passwordHash, existingUser.PasswordHash))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(existingUser);
         }
 
         // Helper method to check if a user exists
