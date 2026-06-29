@@ -18,6 +18,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
