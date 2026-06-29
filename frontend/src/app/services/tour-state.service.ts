@@ -20,6 +20,7 @@ const defaultImageUrl = 'https://images.unsplash.com/photo-1500530855697-b586d89
 const demoTours: Tour[] = [
   {
     id: 1,
+    userId: 0,
     name: 'River Loop Ride',
     description: 'A relaxed bike loop from the harbor park to Quarry Bend with two short rest stops.',
     from: 'Harbor Park',
@@ -54,6 +55,7 @@ const demoTours: Tour[] = [
   },
   {
     id: 2,
+    userId: 0,
     name: 'Alpine Day Hike',
     description: 'A scenic hike from Summit Lot to Blue Ridge with a steep middle segment.',
     from: 'Summit Lot',
@@ -275,6 +277,7 @@ export class TourStateService {
   private normalizeTour(tour: Partial<Tour>): Tour {
     return {
       id: tour.id ?? this.createLocalId(),
+      userId: tour.userId ?? 0,
       name: this.cleanText(tour.name, 'Untitled tour'),
       description: this.cleanText(tour.description, 'No description yet.'),
       from: this.cleanText(tour.from, 'Unknown start'),

@@ -4,6 +4,7 @@ export type TransportType = 'Bike' | 'Hike' | 'Running' | 'Vacation';
 
 export interface Tour {
     id: number;
+    userId: number;
     name: string;
     description: string;
     from: string;
@@ -16,4 +17,4 @@ export interface Tour {
     logs: TourLog[];
 }
 
-export type TourFormValue = Omit<Tour, 'id' | 'logs'>;
+export type TourFormValue = Omit<Tour, 'id' | 'logs' | 'userId'>;
