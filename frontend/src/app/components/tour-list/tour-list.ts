@@ -4,11 +4,12 @@ import { TourStateService } from '../../services/tour-state.service';
 
 import { Tour, TourFormValue } from '../../models/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
+import { SearchFiltersComponent } from '../search-filters/search-filters.component';
 
 @Component({
   selector: 'app-tour-list',
   standalone: true,
-  imports: [TourFormComponent],
+  imports: [TourFormComponent, SearchFiltersComponent],
   templateUrl: './tour-list.html',
   styleUrls: ['./tour-list.css']
 })
@@ -18,6 +19,7 @@ export class TourListComponent implements OnInit {
 
   readonly tours = this.tourState.filteredTours$;
   readonly selectedTour = this.tourState.selectedTour$;
+  readonly totalTours = this.tourState.tours$;
 
   showForm = false;
   editingTour: Tour | null = null;

@@ -9,6 +9,16 @@
 
     <p class="status-note">{{ tourState.apiStatus() }}</p>
 
+    <app-search-filters></app-search-filters>
+    
+    @if (tourState.hasActiveSearch$()) {
+    <p class="result-count">
+        @if (tours().length > 0) {
+        {{ tours().length }} of {{ totalTours().length }} tour{{ totalTours().length !== 1 ? 's' : '' }}
+        }
+    </p>
+    }
+
     @if (showForm) {
     <app-tour-form [tour]="editingTour" (saveTour)="saveTour($event)" (cancelEdit)="cancelForm()"></app-tour-form>
     }
@@ -37,7 +47,12 @@
     } @else {
     <div class="empty-state">
         <h3>No tours found</h3>
-        <p>Create a tour or clear the search field.</p>
+        @if (tourState.hasActiveSearch$()) {
+        <p>No tours match your current search or filters.</p>
+        <button type="button" class="secondary-btn" (click)="tourState.clearAllFilters()">Clear search</button>
+        } @else {
+        <p>Create your first tour to get started.</p>
+        }
     </div>
     }
 </div>

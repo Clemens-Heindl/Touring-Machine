@@ -1,0 +1,44 @@
+<div class="filter-bar">
+
+  <div class="filter-row">
+    <span class="filter-label">Transport</span>
+    @for (type of transportTypes; track type) {
+      <button type="button" class="chip"
+        [class.active]="isTransportActive(type)"
+        (click)="tourState.toggleTransportFilter(type)">
+        {{ type }}
+      </button>
+    }
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">Popularity</span>
+    @for (p of popularities; track p) {
+      <button type="button" class="chip"
+        [class.active]="isPopularityActive(p)"
+        (click)="tourState.togglePopularityFilter(p)">
+        {{ p }}
+      </button>
+    }
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">Suitability</span>
+    @for (s of suitabilities; track s) {
+      <button type="button" class="chip"
+        [class.active]="isSuitabilityActive(s)"
+        (click)="tourState.toggleChildFriendlinessFilter(s)">
+        {{ s }}
+      </button>
+    }
+  </div>
+
+  @if (tourState.hasActiveSearch$()) {
+    <div class="filter-footer">
+      <button type="button" class="clear-all-btn" (click)="tourState.clearAllFilters()">
+        ✕ Clear all filters
+      </button>
+    </div>
+  }
+
+</div>
