@@ -51,10 +51,20 @@
     </div>
   </div>
 
+  <div class="route-map-block">
+    @if (isLoadingRoute) {
+    <p class="route-status route-loading">Calculating route…</p>
+    }
+    @if (routeError) {
+    <p class="route-status route-error">{{ routeError }}</p>
+    }
+    <app-map [routeGeoJson]="routePreviewGeoJson"></app-map>
+  </div>
+
   <div class="form-grid two-columns">
     <label>
       Distance (km)
-      <input type="number" min="0.1" step="0.1" formControlName="distance">
+      <input type="number" min="0.1" step="0.1" formControlName="distance" [attr.readonly]="isLoadingRoute ? true : null">
       @if (hasError('distance')) {
         <span class="field-error">Distance must be greater than 0.</span>
       }
@@ -62,21 +72,12 @@
 
     <label>
       Estimated time
-      <input formControlName="estimatedTime" placeholder="02:10:00">
+      <input formControlName="estimatedTime" placeholder="02:10:00" [attr.readonly]="isLoadingRoute ? true : null">
       @if (hasError('estimatedTime')) {
         <span class="field-error">Use hh:mm or hh:mm:ss.</span>
       }
     </label>
   </div>
-
-  <label>
-    Route information
-    <textarea formControlName="routeInformation" rows="2"
-      placeholder="Harbor Park → River Trail → Quarry Bend"></textarea>
-    @if (hasError('routeInformation')) {
-      <span class="field-error">Route information is required.</span>
-    }
-  </label>
 
   <label>
     Image URL

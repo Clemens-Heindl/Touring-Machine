@@ -19,6 +19,30 @@
   border-radius: 4px;
 }
 
+.route-map-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.route-status {
+  margin: 0;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.route-loading {
+  color: #555;
+  background: #f0f4ff;
+  border: 1px solid #c7d7ff;
+}
+
+.route-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
 .form-container button {
   padding: 10px 15px;
   background-color: #28a745;
