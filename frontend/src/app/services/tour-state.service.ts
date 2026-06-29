@@ -233,20 +233,42 @@ export class TourStateService {
   }
 
   getPopularity(tour: Tour): string {
-    if (tour.logs.length === 0) return 'New';
-    if (tour.logs.length < TOUR_CONFIG.popularity.popularMinLogs) return 'Known';
+    const { knownMinLogs, popularMinLogs } = TOUR_CONFIG.popularity;
+    if (tour.logs.length < knownMinLogs) return 'New';
+    if (tour.logs.length < popularMinLogs) return 'Known';
     return 'Popular';
   }
 
   getChildFriendliness(tour: Tour): string {
     const cfg = TOUR_CONFIG.childFriendliness;
+
     if (tour.logs.length === 0) {
-      return tour.distance <= cfg.noLogsMaxDistanceKm ? 'Likely child-friendly' : 'Unknown';
+      const hours = this.parseTimeToHours(tour.estimatedTime);
+      if (tour.distance <= cfg.noLogsFriendlyMaxDistanceKm && hours <= cfg.noLogsFriendlyMaxTimeHours) {
+        return 'Child-friendly';
+      }
+      if (tour.distance <= cfg.noLogsModerateMaxDistanceKm && hours <= cfg.noLogsModerateMaxTimeHours) {
+        return 'Moderate';
+      }
+      return 'Challenging';
     }
+
     const avgDifficulty = tour.logs.reduce((s, l) => s + l.difficulty, 0) / tour.logs.length;
-    const avgDistance = tour.logs.reduce((s, l) => s + l.totalDistance, 0) / tour.logs.length;
-    if (avgDifficulty <= cfg.friendlyMaxAvgDifficulty && avgDistance <= cfg.friendlyMaxAvgDistanceKm) return 'Child-friendly';
-    if (avgDifficulty <= cfg.moderateMaxAvgDifficulty && avgDistance <= cfg.moderateMaxAvgDistanceKm) return 'Moderate';
+    const avgDistanceKm = tour.logs.reduce((s, l) => s + l.totalDistance, 0) / tour.logs.length;
+    const avgTimeHours = tour.logs.reduce((s, l) => s + this.parseTimeToHours(l.totalTime), 0) / tour.logs.length;
+
+    if (
+      avgDifficulty <= cfg.friendlyMaxAvgDifficulty &&
+      avgDistanceKm <= cfg.friendlyMaxAvgDistanceKm &&
+      avgTimeHours <= cfg.friendlyMaxAvgTimeHours
+    ) return 'Child-friendly';
+
+    if (
+      avgDifficulty <= cfg.moderateMaxAvgDifficulty &&
+      avgDistanceKm <= cfg.moderateMaxAvgDistanceKm &&
+      avgTimeHours <= cfg.moderateMaxAvgTimeHours
+    ) return 'Moderate';
+
     return 'Challenging';
   }
 
@@ -279,6 +301,15 @@ export class TourStateService {
     };
   }
 
+  private parseTimeToHours(timeStr: string): number {
+    if (!timeStr) return 0;
+    const parts = timeStr.split(':');
+    const h = Number(parts[0] ?? 0);
+    const m = Number(parts[1] ?? 0);
+    const s = Number(parts[2] ?? 0);
+    return h + m / 60 + s / 3600;
+  }
+
   private matchesToken(haystack: string, token: string): boolean {
     const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return new RegExp(`\\b${escaped}`, 'i').test(haystack);
@@ -296,10 +327,8 @@ export class TourStateService {
   private childFriendlinessAliases(cf: string): string {
     const map: Record<string, string> = {
       'Child-friendly': 'easy family kids children friendly',
-      'Likely child-friendly': 'easy likely family kids children',
       'Moderate': 'medium moderate average',
       'Challenging': 'hard difficult challenging tough advanced',
-      'Unknown': 'unknown'
     };
     return map[cf] ?? '';
   }
