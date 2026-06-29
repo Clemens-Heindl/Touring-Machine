@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Tour } from '../models/tour.model';
 import { TourLog } from '../models/tour-log.model';
+import { TOUR_CONFIG } from '../config/tour.config';
 
 export interface ActiveFilters {
   transportTypes: string[];
@@ -121,7 +122,7 @@ export class TourStateService {
         childFriendliness, childFriendlinessAliases
       ].join(' ').toLowerCase();
 
-      return tokens.every(token => haystack.includes(token));
+      return tokens.every(token => this.matchesToken(haystack, token));
     });
   });
   public readonly selectedTour$ = computed(() => {
@@ -232,33 +233,20 @@ export class TourStateService {
   }
 
   getPopularity(tour: Tour): string {
-    if (tour.logs.length === 0) {
-      return 'New';
-    }
-
-    if (tour.logs.length < 3) {
-      return 'Known';
-    }
-
+    if (tour.logs.length === 0) return 'New';
+    if (tour.logs.length < TOUR_CONFIG.popularity.popularMinLogs) return 'Known';
     return 'Popular';
   }
 
   getChildFriendliness(tour: Tour): string {
+    const cfg = TOUR_CONFIG.childFriendliness;
     if (tour.logs.length === 0) {
-      return tour.distance <= 10 ? 'Likely child-friendly' : 'Unknown';
+      return tour.distance <= cfg.noLogsMaxDistanceKm ? 'Likely child-friendly' : 'Unknown';
     }
-
-    const averageDifficulty = tour.logs.reduce((sum, log) => sum + log.difficulty, 0) / tour.logs.length;
-    const averageDistance = tour.logs.reduce((sum, log) => sum + log.totalDistance, 0) / tour.logs.length;
-
-    if (averageDifficulty <= 2 && averageDistance <= 12) {
-      return 'Child-friendly';
-    }
-
-    if (averageDifficulty <= 3 && averageDistance <= 25) {
-      return 'Moderate';
-    }
-
+    const avgDifficulty = tour.logs.reduce((s, l) => s + l.difficulty, 0) / tour.logs.length;
+    const avgDistance = tour.logs.reduce((s, l) => s + l.totalDistance, 0) / tour.logs.length;
+    if (avgDifficulty <= cfg.friendlyMaxAvgDifficulty && avgDistance <= cfg.friendlyMaxAvgDistanceKm) return 'Child-friendly';
+    if (avgDifficulty <= cfg.moderateMaxAvgDifficulty && avgDistance <= cfg.moderateMaxAvgDistanceKm) return 'Moderate';
     return 'Challenging';
   }
 
@@ -289,6 +277,11 @@ export class TourStateService {
       totalTime: this.cleanText(log.totalTime, '00:00:00'),
       rating: Number(log.rating ?? 3)
     };
+  }
+
+  private matchesToken(haystack: string, token: string): boolean {
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${escaped}`, 'i').test(haystack);
   }
 
   private popularityAliases(popularity: string): string {
