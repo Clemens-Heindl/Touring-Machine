@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -32,14 +32,16 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string): Observable<boolean> {
+  login(email: string, password: string): Observable<User | null> {
     return from(this.hashPassword(password)).pipe(
       switchMap(passwordHash => {
         const params = new HttpParams()
           .set('email', email)
           .set('passwordHash', passwordHash);
 
-        return this.http.get<boolean>(`${this.apiUrl}/login`, { params });
+        return this.http.get<User>(`${this.apiUrl}/login`, { params }).pipe(
+          catchError(() => of(null))
+        );
       })
     );
   }

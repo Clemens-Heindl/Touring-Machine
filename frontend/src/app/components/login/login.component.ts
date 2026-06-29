@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -12,13 +12,12 @@ import { User } from '../../models/user.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   @Input() mode: 'login' | 'register' = 'login';
 
   private authService = inject(AuthService);
   private userState = inject(UserStateService);
 
-  users: User[] = [];
   name = '';
   email = '';
   password = '';
@@ -30,17 +29,6 @@ export class LoginComponent implements OnInit {
 
   get isRegisterMode() {
     return this.mode === 'register';
-  }
-
-  ngOnInit(): void {
-    this.authService.getUsers().subscribe({
-      next: users => {
-        this.users = users;
-      },
-      error: () => {
-        this.userState.setError('Unable to load users from the API.');
-      }
-    });
   }
 
   submit() {
@@ -73,7 +61,6 @@ export class LoginComponent implements OnInit {
       this.authService.register(newUser).subscribe({
         next: createdUser => {
           this.isLoading = false;
-          this.users.push(createdUser);
           this.userState.setCurrentUser(createdUser);
           this.name = '';
           this.email = '';
@@ -88,9 +75,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const user = this.users.find(u => u.email.toLowerCase() === this.email.trim().toLowerCase());
-    if (!user) {
-      this.userState.setError('Unknown user email.');
+    if (!this.email.trim()) {
+      this.userState.setError('Enter your email.');
       return;
     }
 
@@ -100,10 +86,10 @@ export class LoginComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.authService.login(user.email, this.password).subscribe({
-      next: isValid => {
+    this.authService.login(this.email.trim(), this.password).subscribe({
+      next: user => {
         this.isLoading = false;
-        if (isValid) {
+        if (user) {
           this.userState.setCurrentUser(user);
         } else {
           this.userState.setError('Invalid credentials.');
