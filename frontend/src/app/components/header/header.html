@@ -11,16 +11,19 @@
         <input id="global-search" type="search" placeholder="Name, location, rating, child-friendly..."
             [ngModel]="tourState.searchTerm$()" (ngModelChange)="updateSearch($event)" />
     </div>
-    <div class="user-actions">
-        <div class="user-box" [hidden]="!isLoggedIn">
-            <span class="user-label">Signed in as {{ userState.currentUser$()?.name }}</span>
-            <button type="button" class="secondary-btn" (click)="logout()">Logout</button>
+    @if (isLoggedIn) {
+        <div class="user-actions">
+            <div class="user-box">
+                <span class="user-label">Signed in as {{ userState.currentUser$()?.name }}</span>
+                <button type="button" class="secondary-btn" (click)="logout()">Logout</button>
+            </div>
         </div>
-        <div class="auth-buttons" [hidden]="isLoggedIn">
+    } @else {
+        <div class="auth-buttons">
             <button type="button" class="secondary-btn" (click)="openLogin()">Login</button>
             <button type="button" class="secondary-btn" (click)="openRegister()">Register</button>
         </div>
-    </div>
+    }
     <div class="login-panel" [hidden]="!showAuthPanel || isLoggedIn">
       <app-login [mode]="authMode"></app-login>
     </div>

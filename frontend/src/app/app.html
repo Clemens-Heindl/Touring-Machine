@@ -2,16 +2,19 @@
   <app-header></app-header>
   <div class="workspace">
     <app-navbar></app-navbar>
-    <main class="content-area" [hidden]="!isAuthenticated">
-      <app-tour-list></app-tour-list>
-      <section class="inspector-column" aria-label="Tour details and logs">
-        <app-tour-details></app-tour-details>
-        <app-tour-log-list></app-tour-log-list>
+    @if (isAuthenticated) {
+      <main class="content-area">
+        <app-tour-list></app-tour-list>
+        <section class="inspector-column" aria-label="Tour details and logs">
+          <app-tour-details></app-tour-details>
+          <app-tour-log-list></app-tour-log-list>
       </section>
     </main>
-    <section class="guest-state" [hidden]="isAuthenticated">
+  } @else {
+    <section class="guest-state">
       <h2>Please sign in to view your tours</h2>
       <p>Log in or create an account to continue.</p>
     </section>
+  }
   </div>
 </div>

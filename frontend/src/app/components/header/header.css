@@ -13,10 +13,6 @@
   align-items: center;
 }
 
-.auth-buttons .secondary-btn + .secondary-btn {
-  border-left: 0;
-}
-
 .user-box {
   display: inline-flex;
   align-items: center;
@@ -37,6 +33,7 @@
 
 .secondary-btn {
   padding: 0.75rem 1rem;
+  margin: 0 0.5rem 0 0;
   background: transparent;
   border: 1px solid #d1d5db;
   border-radius: 0.85rem;
