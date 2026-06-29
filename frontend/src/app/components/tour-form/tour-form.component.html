@@ -89,9 +89,7 @@
 
   <div class="button-row form-actions">
     <button type="submit" class="primary-btn">{{ isEditing ? 'Save tour' : 'Create tour' }}</button>
-    @if (isEditing) {
-      <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
-    }
+    <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
   </div>
 
 </form>

@@ -69,9 +69,7 @@
 
   <div class="button-row form-actions">
     <button type="submit" class="primary-btn">{{ isEditing ? 'Save log' : 'Add log' }}</button>
-    @if (isEditing) {
-      <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
-    }
+    <button type="button" class="secondary-btn" (click)="cancel()">Cancel</button>
   </div>
 
 </form>
