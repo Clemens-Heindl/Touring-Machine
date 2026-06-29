@@ -4,13 +4,12 @@
   <div class="section">
     <h2>Export Tours</h2>
     <p>Export all tours and logs to a file</p>
-    <button class="btn btn-primary">Export as JSON</button>
+    <button class="btn btn-primary" (click)="exportTours()">Export as JSON</button>
   </div>
 
   <div class="section">
     <h2>Import Tours</h2>
     <p>Import tours and logs from a file</p>
-    <input type="file" accept=".json" />
-    <button class="btn btn-primary">Import</button>
+    <input type="file" (change)="importTours($event)" accept=".json" />
   </div>
 </div>
