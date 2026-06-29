@@ -2,6 +2,18 @@ import { computed, Injectable, signal } from '@angular/core';
 import { Tour } from '../models/tour.model';
 import { TourLog } from '../models/tour-log.model';
 
+export interface ActiveFilters {
+  transportTypes: string[];
+  popularities: string[];
+  childFriendliness: string[];
+}
+
+const EMPTY_FILTERS: ActiveFilters = {
+  transportTypes: [],
+  popularities: [],
+  childFriendliness: []
+};
+
 const defaultImageUrl = 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80';
 
 const demoTours: Tour[] = [
@@ -61,25 +73,55 @@ export class TourStateService {
   private tours = signal<Tour[]>(demoTours);
   private selectedTourId = signal<number | null>(demoTours[0]?.id ?? null);
   private searchTerm = signal('');
+  private activeFilters = signal<ActiveFilters>({ ...EMPTY_FILTERS });
   private nextLocalId = 1000;
 
   public readonly tours$ = this.tours.asReadonly();
   public readonly searchTerm$ = this.searchTerm.asReadonly();
+  public readonly activeFilters$ = this.activeFilters.asReadonly();
   public readonly apiStatus = signal('Demo data is shown until the ASP.NET API responds.');
+
+  public readonly hasActiveSearch$ = computed(() => {
+    const term = this.searchTerm().trim();
+    const f = this.activeFilters();
+    return term.length > 0
+      || f.transportTypes.length > 0
+      || f.popularities.length > 0
+      || f.childFriendliness.length > 0;
+  });
+
   public readonly filteredTours$ = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
-
-    if (!term) {
-      return this.tours();
-    }
+    const tokens = term.split(/\s+/).filter(t => t.length > 0);
+    const f = this.activeFilters();
 
     return this.tours().filter(tour => {
-      const logText = tour.logs
-        .map(log => `${log.comment} ${log.difficulty} ${log.rating} ${log.totalDistance}`)
-        .join(' ');
-      const haystack = `${tour.name} ${tour.description} ${tour.from} ${tour.to} ${tour.transportType} ${tour.distance} ${tour.estimatedTime} ${tour.routeInformation} ${this.getPopularity(tour)} ${this.getChildFriendliness(tour)} ${logText}`;
+      // --- chip filters (OR within group, AND across groups) ---
+      if (f.transportTypes.length > 0 && !f.transportTypes.includes(tour.transportType)) return false;
+      if (f.popularities.length > 0 && !f.popularities.includes(this.getPopularity(tour))) return false;
+      if (f.childFriendliness.length > 0 && !f.childFriendliness.includes(this.getChildFriendliness(tour))) return false;
 
-      return haystack.toLowerCase().includes(term);
+      // --- text search (all tokens must match somewhere in the haystack) ---
+      if (tokens.length === 0) return true;
+
+      const logText = tour.logs
+        .map(l => `${l.comment} ${l.difficulty} ${l.rating} ${l.totalDistance} ${l.totalTime}`)
+        .join(' ');
+
+      const popularity = this.getPopularity(tour);
+      const childFriendliness = this.getChildFriendliness(tour);
+      const popularityAliases = this.popularityAliases(popularity);
+      const childFriendlinessAliases = this.childFriendlinessAliases(childFriendliness);
+
+      const haystack = [
+        tour.name, tour.description, tour.from, tour.to,
+        tour.transportType, tour.distance, tour.estimatedTime,
+        tour.routeInformation, logText,
+        popularity, popularityAliases,
+        childFriendliness, childFriendlinessAliases
+      ].join(' ').toLowerCase();
+
+      return tokens.every(token => haystack.includes(token));
     });
   });
   public readonly selectedTour$ = computed(() => {
@@ -101,6 +143,38 @@ export class TourStateService {
 
   setSearchTerm(term: string) {
     this.searchTerm.set(term);
+  }
+
+  toggleTransportFilter(type: string): void {
+    this.activeFilters.update(f => ({
+      ...f,
+      transportTypes: f.transportTypes.includes(type)
+        ? f.transportTypes.filter(t => t !== type)
+        : [...f.transportTypes, type]
+    }));
+  }
+
+  togglePopularityFilter(value: string): void {
+    this.activeFilters.update(f => ({
+      ...f,
+      popularities: f.popularities.includes(value)
+        ? f.popularities.filter(v => v !== value)
+        : [...f.popularities, value]
+    }));
+  }
+
+  toggleChildFriendlinessFilter(value: string): void {
+    this.activeFilters.update(f => ({
+      ...f,
+      childFriendliness: f.childFriendliness.includes(value)
+        ? f.childFriendliness.filter(v => v !== value)
+        : [...f.childFriendliness, value]
+    }));
+  }
+
+  clearAllFilters(): void {
+    this.searchTerm.set('');
+    this.activeFilters.set({ ...EMPTY_FILTERS });
   }
 
   setApiStatus(message: string) {
@@ -215,6 +289,26 @@ export class TourStateService {
       totalTime: this.cleanText(log.totalTime, '00:00:00'),
       rating: Number(log.rating ?? 3)
     };
+  }
+
+  private popularityAliases(popularity: string): string {
+    const map: Record<string, string> = {
+      'New': 'new unvisited first',
+      'Known': 'known visited',
+      'Popular': 'popular frequent top'
+    };
+    return map[popularity] ?? '';
+  }
+
+  private childFriendlinessAliases(cf: string): string {
+    const map: Record<string, string> = {
+      'Child-friendly': 'easy family kids children friendly',
+      'Likely child-friendly': 'easy likely family kids children',
+      'Moderate': 'medium moderate average',
+      'Challenging': 'hard difficult challenging tough advanced',
+      'Unknown': 'unknown'
+    };
+    return map[cf] ?? '';
   }
 
   private createLocalId(): number {
