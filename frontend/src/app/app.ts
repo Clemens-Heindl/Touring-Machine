@@ -24,6 +24,6 @@ export class AppComponent {
   private readonly userState = inject(UserStateService);
 
   get isAuthenticated() {
-    return true; // TODO: remove before merging auth PR
+    return this.userState.isAuthenticated$();
   }
 }
