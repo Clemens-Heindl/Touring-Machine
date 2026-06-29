@@ -1,13 +1,10 @@
 using System.Security.Cryptography;
+using System.Text;
 
 namespace TourPlannerAPI.Utilities
 {
     public static class PasswordHelper
     {
-        private const int SaltSize = 16;
-        private const int KeySize = 32;
-        private const int Iterations = 100_000;
-
         public static string HashPassword(string password)
         {
             if (password is null)
@@ -15,36 +12,23 @@ namespace TourPlannerAPI.Utilities
                 throw new ArgumentNullException(nameof(password));
             }
 
-            byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
-            byte[] key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, KeySize);
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
 
-            return $"{Iterations}.{Convert.ToBase64String(salt)}.{Convert.ToBase64String(key)}";
+            return Convert.ToHexString(hash);
         }
 
-        public static bool VerifyPassword(string password, string storedHash)
+        public static bool VerifyPassword(string passwordHash, string storedHash)
         {
-            if (password is null)
-            {
-                throw new ArgumentNullException(nameof(password));
-            }
-
-            if (string.IsNullOrWhiteSpace(storedHash))
+            if (string.IsNullOrWhiteSpace(passwordHash) || string.IsNullOrWhiteSpace(storedHash))
             {
                 return false;
             }
 
-            var parts = storedHash.Split('.');
-            if (parts.Length != 3 || !int.TryParse(parts[0], out var iterations))
-            {
-                return false;
-            }
-
-            var salt = Convert.FromBase64String(parts[1]);
-            var storedKey = Convert.FromBase64String(parts[2]);
-
-            var computedKey = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, HashAlgorithmName.SHA256, storedKey.Length);
-
-            return CryptographicOperations.FixedTimeEquals(computedKey, storedKey);
+            return CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(passwordHash),
+                Encoding.UTF8.GetBytes(storedHash));
         }
     }
 }

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -14,15 +15,32 @@ export class AuthService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  register(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
+  private async hashPassword(password: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+
+    return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
-  login(userId: number, password: string): Observable<boolean> {
-    const params = new HttpParams()
-      .set('id', userId.toString())
-      .set('PasswordHash', password);
+  register(user: User): Observable<User> {
+    return from(this.hashPassword(user.passwordHash)).pipe(
+      switchMap(passwordHash => {
+        const secureUser = { ...user, passwordHash };
+        return this.http.post<User>(this.apiUrl, secureUser);
+      })
+    );
+  }
 
-    return this.http.get<boolean>(`${this.apiUrl}/login`, { params });
+  login(email: string, password: string): Observable<boolean> {
+    return from(this.hashPassword(password)).pipe(
+      switchMap(passwordHash => {
+        const params = new HttpParams()
+          .set('email', email)
+          .set('passwordHash', passwordHash);
+
+        return this.http.get<boolean>(`${this.apiUrl}/login`, { params });
+      })
+    );
   }
 }

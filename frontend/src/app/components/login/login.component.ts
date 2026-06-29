@@ -73,7 +73,11 @@ export class LoginComponent implements OnInit {
       this.authService.register(newUser).subscribe({
         next: createdUser => {
           this.isLoading = false;
+          this.users.push(createdUser);
           this.userState.setCurrentUser(createdUser);
+          this.name = '';
+          this.email = '';
+          this.password = '';
         },
         error: () => {
           this.isLoading = false;
@@ -96,7 +100,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.authService.login(user.id, this.password).subscribe({
+    this.authService.login(user.email, this.password).subscribe({
       next: isValid => {
         this.isLoading = false;
         if (isValid) {

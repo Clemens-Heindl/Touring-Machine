@@ -73,11 +73,6 @@ namespace TourPlannerAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            if (!string.IsNullOrWhiteSpace(user.PasswordHash))
-            {
-                user.PasswordHash = PasswordHelper.HashPassword(user.PasswordHash);
-            }
-
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -101,20 +96,19 @@ namespace TourPlannerAPI.Controllers
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<bool>> login(int id, User user)
+        public async Task<ActionResult<bool>> Login(string email, string passwordHash)
         {
-            var existingUser = await _context.Users.FindAsync(id);
-            if (existingUser == null)
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (existingUser == null || string.IsNullOrWhiteSpace(passwordHash))
             {
-                return NotFound(false);
+                return Ok(false);
             }
 
-            var isValidLogin = PasswordHelper.VerifyPassword(user.PasswordHash, existingUser.PasswordHash);
+            var isValidLogin = PasswordHelper.VerifyPassword(passwordHash, existingUser.PasswordHash);
             return Ok(isValidLogin);
         }
 
         // Helper method to check if a user exists
-
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
