@@ -3,19 +3,25 @@
   <div class="workspace">
     <app-navbar></app-navbar>
     @if (isAuthenticated) {
-      <main class="content-area">
-        <router-outlet></router-outlet>
-        <section class="inspector-column" aria-label="Tour details and logs">
-          <app-tour-details></app-tour-details>
-          <app-tour-log-list></app-tour-log-list>
-        </section>
+      @if (isTourRoute) {
+        <main class="content-area">
+          <app-tour-list></app-tour-list>
+          <section class="inspector-column" aria-label="Tour details and logs">
+            <app-tour-details></app-tour-details>
+            <app-tour-log-list></app-tour-log-list>
+          </section>
         </main>
-        } @else {
-        <section class="guest-state">
-          <h2>Please sign in to view your tours</h2>
-          <p>Log in or create an account to continue.</p>
-        </section>
+      } @else {
+        <main class="content-area-full">
+          <router-outlet></router-outlet>
+        </main>
         }
+        } @else {
+      <section class="guest-state">
+        <h2>Please sign in to view your tours</h2>
+        <p>Log in or create an account to continue.</p>
+      </section>
+      }
   </div>
 </div>
 

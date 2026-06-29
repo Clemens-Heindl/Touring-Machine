@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Header } from './components/header/header';
 import { Navbar } from './components/navbar/navbar';
+import { TourListComponent } from './components/tour-list/tour-list';
 import { TourDetailsComponent } from './components/tour-details/tour-details';
 import { TourLogListComponent } from './components/tour-log-list/tour-log-list';
 import { UserStateService } from './services/user-state.service';
@@ -13,6 +14,7 @@ import { UserStateService } from './services/user-state.service';
     RouterModule,
     Header,
     Navbar,
+    TourListComponent,
     TourDetailsComponent,
     TourLogListComponent
   ],
@@ -22,8 +24,13 @@ import { UserStateService } from './services/user-state.service';
 export class AppComponent {
   title = 'frontend';
   private readonly userState = inject(UserStateService);
+  private readonly router = inject(Router);
 
   get isAuthenticated() {
     return this.userState.isAuthenticated$();
+  }
+
+  get isTourRoute() {
+    return this.router.url === '/' || this.router.url === '/tours';
   }
 }

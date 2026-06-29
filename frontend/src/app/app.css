@@ -15,11 +15,14 @@ padding: 16px 0 40px;
 
 .content-area {
     display: grid;
-grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.6fr);
+    grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.6fr);
     gap: 18px;
     align-items: start;
 }
 
+.content-area-full {
+    width: 100%;
+}
 .inspector-column {
     display: grid;
 gap: 18px;
