@@ -18,10 +18,7 @@
         <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
         <div><span>Image</span><strong>Stored as URL</strong></div>
     </div>
-    <div class="map-placeholder">
-        <strong>Leaflet map placeholder</strong>
-        <span>{{ tour.routeInformation }}</span>
-    </div>
+    <app-map [routeGeoJson]="tour.routeInformation ?? null"></app-map>
 </section>
 } @else {
     <section class="empty-state">
