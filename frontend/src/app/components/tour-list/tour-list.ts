@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
 import { TourStateService } from '../../services/tour-state.service';
+import { UserStateService } from '../../services/user-state.service';
 
 import { Tour, TourFormValue } from '../../models/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
@@ -15,6 +16,7 @@ import { SearchFiltersComponent } from '../search-filters/search-filters.compone
 })
 export class TourListComponent implements OnInit {
   private tourService = inject(TourService);
+  private userState = inject(UserStateService);
   tourState = inject(TourStateService);
 
   readonly tours = this.tourState.filteredTours$;
@@ -52,10 +54,12 @@ export class TourListComponent implements OnInit {
   }
 
   saveTour(formValue: TourFormValue) {
+    const userId = this.userState.currentUser$()?.id ?? 0;
+
     if (this.editingTour) {
       const updatedTour = { ...this.editingTour, ...formValue };
 
-      this.tourService.updateTour(updatedTour.id, { ...formValue, id: updatedTour.id }).subscribe({
+      this.tourService.updateTour(updatedTour.id, { ...formValue, id: updatedTour.id, userId: updatedTour.userId }).subscribe({
         next: () => {
           this.tourState.updateTour(updatedTour);
           this.closeForm('Tour updated.');
@@ -68,7 +72,7 @@ export class TourListComponent implements OnInit {
       return;
     }
 
-    const draftTour: Partial<Tour> = { ...formValue, logs: [] };
+    const draftTour: Partial<Tour> = { ...formValue, userId, logs: [] };
     this.tourService.createTour(draftTour).subscribe({
       next: newTour => {
         this.tourState.addTour({ ...draftTour, ...newTour, imageUrl: newTour.imageUrl || formValue.imageUrl });
