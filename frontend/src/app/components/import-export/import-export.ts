@@ -68,6 +68,8 @@ export class ImportExportComponent {
         const tours: Tour[] = JSON.parse(reader.result as string);
 
         this.tourState.setTours(tours);
+        console.log(`Selected file: ${file.name}, Size: ${this.selectedFileSize}`);
+        console.log(`File content: ${JSON.stringify(this.tours())}`);
 
       } catch (err) {
         console.error('Invalid JSON file', err);
@@ -77,8 +79,6 @@ export class ImportExportComponent {
 
     reader.readAsText(file);
     console.log('Importing tours and logs from a file...');
-    console.log(`Selected file: ${file.name}, Size: ${this.selectedFileSize}`);
-    console.log(`File content: ${JSON.stringify(this.tours())}`);
   }
 
   private formatFileSize(bytes: number): string {
