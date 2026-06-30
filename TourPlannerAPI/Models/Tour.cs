@@ -33,6 +33,7 @@ namespace TourPlannerAPI.Models
 
         public TimeSpan EstimatedTime { get; set; }
 
+        [JsonIgnore]
         public string? RouteInformation { get; set; } // Could store GeoJSON or similar
 
         public ICollection<TourLog> Logs { get; set; } = new List<TourLog>();
