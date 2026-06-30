@@ -67,7 +67,10 @@ export class ImportExportComponent {
       try {
         const tours: Tour[] = JSON.parse(reader.result as string);
 
-        this.tourState.setTours(tours);
+        tours.forEach(tour => {
+          this.tourState.addTour(tour);
+          this.tourService.createOrUpdateTour(tour);
+        });
         console.log(`Selected file: ${file.name}, Size: ${this.selectedFileSize}`);
         console.log(`File content: ${JSON.stringify(this.tours())}`);
 

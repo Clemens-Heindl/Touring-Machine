@@ -39,7 +39,7 @@ namespace TourPlannerAPI.Controllers
 
         // PUT: api/Tours/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTour(int id, Tour tour)
+        public async Task<ActionResult<Tour>> PutTour(int id, Tour tour)
         {
             if (id != tour.Id)
             {
@@ -64,7 +64,7 @@ namespace TourPlannerAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return UpdatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
         }
 
         // POST: api/Tours

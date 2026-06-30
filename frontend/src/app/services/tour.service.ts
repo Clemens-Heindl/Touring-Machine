@@ -18,11 +18,19 @@ export class TourService {
     return this.http.post<Tour>(this.apiUrl, tour);
   }
 
-  updateTour(id: number, tour: Partial<Tour>): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, tour);
+  updateTour(id: number, tour: Partial<Tour>): Observable<Tour> {
+    return this.http.put<Tour>(`${this.apiUrl}/${id}`, tour);
   }
 
   deleteTour(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  createOrUpdateTour(tour: Partial<Tour>): Observable<Tour> {
+    if (tour.id) {
+      return this.updateTour(tour.id, tour);
+    } else {
+      return this.createTour(tour);
+    }
   }
 }
