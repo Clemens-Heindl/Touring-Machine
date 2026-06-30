@@ -60,8 +60,8 @@ export class TourListComponent implements OnInit {
       const updatedTour = { ...this.editingTour, ...formValue };
 
       this.tourService.updateTour(updatedTour.id, { ...formValue, id: updatedTour.id, userId: updatedTour.userId }).subscribe({
-        next: () => {
-          this.tourState.updateTour(updatedTour);
+        next: (returnedTour) => {
+          this.tourState.updateTour(returnedTour);
           this.closeForm('Tour updated.');
         },
         error: () => {
