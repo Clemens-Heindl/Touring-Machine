@@ -1,9 +1,33 @@
+.import-export-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+}
 .section-description {
   color: #6b6255;
   font-size: 0.92rem;
   margin-bottom: 12px;
 }
 
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #0b6f5b;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.86rem;
+  width: fit-content;
+}
+
+.export-btn:hover {
+  background: #084f45;
+}
 .file-input-wrapper {
   position: relative;
   display: inline-block;
@@ -27,7 +51,7 @@
   font-weight: 800;
   cursor: pointer;
   transition: background 0.15s;
-    font-size: 0.86rem;
+  font-size: 0.86rem;
 }
 
 .file-input-label:hover {
