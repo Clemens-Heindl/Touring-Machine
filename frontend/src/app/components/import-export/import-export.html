@@ -1,15 +1,20 @@
-<div class="import-export-container">
-  <h1>Import / Export</h1>
-  
-  <div class="section">
-    <h2>Export Tours</h2>
-    <p>Export all tours and logs to a file</p>
-    <button class="btn btn-primary" (click)="exportTours()">Export as JSON</button>
+<div class="form-card">
+  <div class="form-heading">
+    <h2>Import / Export</h2>
   </div>
 
-  <div class="section">
-    <h2>Import Tours</h2>
-    <p>Import tours and logs from a file</p>
-    <input type="file" (change)="importTours($event)" accept=".json" />
+  <div class="form-block">
+    <span class="block-label">Export Tours</span>
+    <p class="section-description">Export all tours and logs to a JSON file</p>
+    <button class="primary-btn" (click)="exportTours()">Export as JSON</button>
+  </div>
+
+  <div class="form-block">
+    <span class="block-label">Import Tours</span>
+    <p class="section-description">Import tours and logs from a JSON file</p>
+    <div class="file-input-wrapper">
+      <input type="file" id="tour-file" (change)="importTours($event)" accept=".json" />
+      <label for="tour-file" class="file-input-label">Choose file</label>
+    </div>
   </div>
 </div>

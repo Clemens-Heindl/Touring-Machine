@@ -1,41 +1,35 @@
-.import-export-container {
-  padding: 20px;
+.section-description {
+  color: #6b6255;
+  font-size: 0.92rem;
+  margin-bottom: 12px;
 }
 
-.section {
-  margin-bottom: 30px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.file-input-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-.section h2 {
-  margin-top: 0;
+#tour-file {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
-.section p {
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.btn {
-  padding: 8px 16px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn-primary {
-  background-color: #007bff;
+.file-input-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #0b6f5b;
   color: white;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s;
+    font-size: 0.86rem;
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-input[type="file"] {
-  margin-right: 10px;
+.file-input-label:hover {
+  background: #084f45;
 }
