@@ -20,6 +20,8 @@ export class ImportExportComponent {
 
   showForm = false;
   editingTour: Tour | null = null;
+  selectedFileName: string | null = null;
+  selectedFileSize: string | null = null;
 
   ngOnInit(): void {
     this.tourState.setApiStatus('Loading tours from the ASP.NET API...');
@@ -54,6 +56,11 @@ export class ImportExportComponent {
     if (!input.files || input.files.length === 0) return;
 
     const file = input.files[0];
+
+    // Store file information for display
+    this.selectedFileName = file.name;
+    this.selectedFileSize = this.formatFileSize(file.size);
+
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -70,5 +77,15 @@ export class ImportExportComponent {
 
     reader.readAsText(file);
     console.log('Importing tours and logs from a file...');
+  }
+
+  private formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   }
 }

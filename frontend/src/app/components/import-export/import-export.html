@@ -17,6 +17,12 @@
         <input type="file" id="tour-file" (change)="importTours($event)" accept=".json" />
         <label for="tour-file" class="file-input-label">Choose file</label>
       </div>
+      @if (selectedFileName) {
+      <div class="file-info">
+        <p class="file-name">{{ selectedFileName }}</p>
+        <p class="file-size">{{ selectedFileSize }}</p>
+      </div>
+      }
     </div>
   </div>
 </div>

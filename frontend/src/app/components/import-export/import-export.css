@@ -57,3 +57,27 @@
 .file-input-label:hover {
   background: #084f45;
 }
+
+.file-info {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f4efe4;
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+}
+
+.file-name {
+  margin: 0;
+  color: #18201b;
+  font-weight: 700;
+  font-size: 0.92rem;
+  word-break: break-all;
+}
+
+.file-size {
+  margin: 0;
+  color: #6b6255;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
