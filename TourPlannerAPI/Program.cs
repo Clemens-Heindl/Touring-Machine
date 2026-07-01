@@ -25,7 +25,12 @@ builder.Services.AddScoped<TourPlannerAPI.Repositories.ITourRepository, TourPlan
 builder.Services.AddScoped<TourPlannerAPI.Repositories.ITourLogRepository, TourPlannerAPI.Repositories.TourLogRepository>();
 builder.Services.AddScoped<TourPlannerAPI.Repositories.IUserRepository, TourPlannerAPI.Repositories.UserRepository>();
 
+// Business logic layer
+builder.Services.AddScoped<TourPlannerAPI.Services.ITourService, TourPlannerAPI.Services.TourService>();
+builder.Services.AddScoped<TourPlannerAPI.Services.ITourLogService, TourPlannerAPI.Services.TourLogService>();
+builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.Services.UserService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();

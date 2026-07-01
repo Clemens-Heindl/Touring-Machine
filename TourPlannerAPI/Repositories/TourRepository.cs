@@ -14,6 +14,14 @@ public class TourRepository : ITourRepository
         _context = context;
     }
 
+    public async Task<IReadOnlyList<Tour>> GetAllAsync()
+    {
+        return await _context.Tours
+            .Include(t => t.Logs)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<IReadOnlyList<Tour>> GetAllByUserAsync(int userId)
     {
         return await _context.Tours

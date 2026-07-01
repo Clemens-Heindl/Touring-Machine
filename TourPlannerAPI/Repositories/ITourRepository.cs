@@ -9,6 +9,7 @@ namespace TourPlannerAPI.Repositories;
 /// </summary>
 public interface ITourRepository
 {
+    Task<IReadOnlyList<Tour>> GetAllAsync();
     Task<IReadOnlyList<Tour>> GetAllByUserAsync(int userId);
     Task<Tour?> GetByIdAsync(int id);
     Task<Tour> AddAsync(Tour tour);

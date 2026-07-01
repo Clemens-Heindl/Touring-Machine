@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TourPlannerAPI.Data;
-using TourPlannerAPI.Models;
+using TourPlannerAPI.Dtos;
+using TourPlannerAPI.Services;
 
 namespace TourPlannerAPI.Controllers
 {
@@ -9,93 +8,41 @@ namespace TourPlannerAPI.Controllers
     [ApiController]
     public class TourLogsController : ControllerBase
     {
-        private readonly TourPlannerDbContext _context;
+        private readonly ITourLogService _tourLogService;
 
-        public TourLogsController(TourPlannerDbContext context)
+        public TourLogsController(ITourLogService tourLogService)
         {
-            _context = context;
+            _tourLogService = tourLogService;
         }
 
         // GET: api/tours/5/logs
         [HttpGet("tours/{tourId}/logs")]
-        public async Task<ActionResult<IEnumerable<TourLog>>> GetTourLogs(int tourId)
+        public async Task<ActionResult<IReadOnlyList<TourLogDto>>> GetTourLogs(int tourId)
         {
-            var tour = await _context.Tours.Include(t => t.Logs).FirstOrDefaultAsync(t => t.Id == tourId);
-
-            if (tour == null)
-            {
-                return NotFound("Tour not found.");
-            }
-
-            return Ok(tour.Logs);
+            return Ok(await _tourLogService.GetByTourAsync(tourId));
         }
 
         // POST: api/tours/5/logs
         [HttpPost("tours/{tourId}/logs")]
-        public async Task<ActionResult<TourLog>> PostTourLog(int tourId, TourLog tourLog)
+        public async Task<ActionResult<TourLogDto>> PostTourLog(int tourId, SaveTourLogRequest request)
         {
-            var tour = await _context.Tours.FindAsync(tourId);
-            if (tour == null)
-            {
-                return NotFound("Tour not found.");
-            }
-
-            tourLog.TourId = tourId;
-            _context.TourLogs.Add(tourLog);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetTourLogs), new { tourId = tourLog.TourId }, tourLog);
+            var created = await _tourLogService.CreateAsync(tourId, request);
+            return CreatedAtAction(nameof(GetTourLogs), new { tourId = created.TourId }, created);
         }
 
         // PUT: api/logs/5
         [HttpPut("logs/{id}")]
-        public async Task<IActionResult> PutTourLog(int id, TourLog tourLog)
+        public async Task<ActionResult<TourLogDto>> PutTourLog(int id, SaveTourLogRequest request)
         {
-            if (id != tourLog.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tourLog).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TourLogExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(await _tourLogService.UpdateAsync(id, request));
         }
 
         // DELETE: api/logs/5
         [HttpDelete("logs/{id}")]
         public async Task<IActionResult> DeleteTourLog(int id)
         {
-            var tourLog = await _context.TourLogs.FindAsync(id);
-            if (tourLog == null)
-            {
-                return NotFound();
-            }
-
-            _context.TourLogs.Remove(tourLog);
-            await _context.SaveChangesAsync();
-
+            await _tourLogService.DeleteAsync(id);
             return NoContent();
-        }
-
-        private bool TourLogExists(int id)
-        {
-            return _context.TourLogs.Any(e => e.Id == id);
         }
     }
 }
