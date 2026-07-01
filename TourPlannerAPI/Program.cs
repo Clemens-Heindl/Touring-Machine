@@ -37,6 +37,9 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
+// Translate domain exceptions into ProblemDetails responses (first in the pipeline)
+app.UseMiddleware<TourPlannerAPI.Middleware.ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseCors(AngularCorsPolicy);
