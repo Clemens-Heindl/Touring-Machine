@@ -4,6 +4,15 @@ using TourPlannerAPI.Data;
 var builder = WebApplication.CreateBuilder(args);
 const string AngularCorsPolicy = "AngularDevClient";
 
+// Route all ILogger<T> output through log4net. The rolling-file directory comes
+// from configuration (not hard-coded) via a log4net context property.
+var logDirectory = builder.Configuration["Logging:LogDirectory"] ?? "Logs";
+Directory.CreateDirectory(logDirectory);
+log4net.GlobalContext.Properties["LogDirectory"] = logDirectory;
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddLog4Net("log4net.config");
+
 // Add services to the container.
 builder.Services.AddDbContext<TourPlannerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
