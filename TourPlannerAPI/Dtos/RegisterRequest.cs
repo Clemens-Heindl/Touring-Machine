@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TourPlannerAPI.Dtos;
 
-/// <summary>Request shape for user registration.</summary>
+/// <summary>Request shape for user self-registration.</summary>
 public class RegisterRequest
 {
     [Required]
@@ -14,8 +14,8 @@ public class RegisterRequest
     [MaxLength(50)]
     public string Email { get; set; } = string.Empty;
 
-    // Currently the SHA-256 hash computed by the client. Commit 6 moves hashing
-    // server-side and this becomes the raw password.
+    // Raw password sent over HTTPS; hashed server-side with BCrypt.
     [Required]
-    public string PasswordHash { get; set; } = string.Empty;
+    [MinLength(6)]
+    public string Password { get; set; } = string.Empty;
 }

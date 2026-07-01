@@ -30,7 +30,7 @@ public class UserService : IUserService
         {
             Name = request.Name.Trim(),
             Email = email,
-            PasswordHash = request.PasswordHash
+            PasswordHash = PasswordHelper.HashPassword(request.Password)
         };
 
         var created = await _users.AddAsync(user);
@@ -38,13 +38,13 @@ public class UserService : IUserService
         return created.ToDto();
     }
 
-    public async Task<UserDto?> LoginAsync(string email, string passwordHash)
+    public async Task<UserDto?> LoginAsync(string email, string password)
     {
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(passwordHash))
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             return null;
 
         var user = await _users.GetByEmailAsync(email.Trim());
-        if (user is null || !PasswordHelper.VerifyPassword(passwordHash, user.PasswordHash))
+        if (user is null || !PasswordHelper.VerifyPassword(password, user.PasswordHash))
         {
             _logger.LogWarning("Failed login attempt for {Email}", email);
             return null;

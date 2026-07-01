@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { UserStateService } from '../../services/user-state.service';
-import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -51,14 +50,7 @@ export class LoginComponent {
       }
 
       this.isLoading = true;
-      const newUser: User = {
-        id: 0,
-        name: this.name.trim(),
-        email: this.email.trim(),
-        passwordHash: this.password
-      };
-
-      this.authService.register(newUser).subscribe({
+      this.authService.register(this.name.trim(), this.email.trim(), this.password).subscribe({
         next: createdUser => {
           this.isLoading = false;
           this.userState.setCurrentUser(createdUser);

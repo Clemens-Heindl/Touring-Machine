@@ -22,19 +22,19 @@ namespace TourPlannerAPI.Controllers
             return Ok(await _userService.GetByIdAsync(id));
         }
 
-        // POST: api/Users  (self-registration)
-        [HttpPost]
+        // POST: api/Users/register  (self-registration)
+        [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterRequest request)
         {
             var created = await _userService.RegisterAsync(request);
             return CreatedAtAction(nameof(GetUser), new { id = created.Id }, created);
         }
 
-        // GET: api/Users/login
-        [HttpGet("login")]
-        public async Task<ActionResult<UserDto>> Login(string email, string passwordHash)
+        // POST: api/Users/login
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
-            var user = await _userService.LoginAsync(email, passwordHash);
+            var user = await _userService.LoginAsync(request.Email, request.Password);
             if (user is null)
             {
                 return Unauthorized();
