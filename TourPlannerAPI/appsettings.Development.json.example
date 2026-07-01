@@ -5,12 +5,11 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
-  "AllowedHosts": "*",
   "ConnectionStrings": {
-    "DefaultConnection": ""
+    "DefaultConnection": "Host=localhost;Port=5432;Database=TourPlanner;Username=postgres;Password=CHANGE_ME;SSL Mode=Disable;Trust Server Certificate=true"
   },
   "OpenRouteService": {
-    "ApiKey": "",
+    "ApiKey": "PUT_YOUR_OWN_OPENROUTESERVICE_API_KEY_HERE",
     "BaseUrl": "https://api.openrouteservice.org"
   }
 }

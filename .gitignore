@@ -12,8 +12,14 @@ pgdata/
 
 # Node modules and dependency files
 /node_modules/
+node_modules/
 /package-lock.json
 /yarn.lock
+
+# Local configuration containing secrets (DB password, API keys) - keep out of source control
+appsettings.Development.json
+**/appsettings.Development.json
+.env
 
 # Environment files
 /.env
