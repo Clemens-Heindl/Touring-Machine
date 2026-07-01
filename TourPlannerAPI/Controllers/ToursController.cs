@@ -64,7 +64,7 @@ namespace TourPlannerAPI.Controllers
                 }
             }
 
-            return UpdatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
+            return Ok(tour);
         }
 
         // POST: api/Tours

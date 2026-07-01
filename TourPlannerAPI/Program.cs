@@ -19,6 +19,12 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddHttpClient();
+
+// Data access layer (Repository pattern)
+builder.Services.AddScoped<TourPlannerAPI.Repositories.ITourRepository, TourPlannerAPI.Repositories.TourRepository>();
+builder.Services.AddScoped<TourPlannerAPI.Repositories.ITourLogRepository, TourPlannerAPI.Repositories.TourLogRepository>();
+builder.Services.AddScoped<TourPlannerAPI.Repositories.IUserRepository, TourPlannerAPI.Repositories.UserRepository>();
+
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
 builder.Services.AddControllers();
 
