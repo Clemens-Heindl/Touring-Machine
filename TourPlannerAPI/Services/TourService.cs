@@ -7,30 +7,35 @@ using TourPlannerAPI.Repositories;
 namespace TourPlannerAPI.Services;
 
 /// <summary>
-/// Business logic for tours. Owns validation, ownership enforcement and
-/// orchestration; talks only to the repository layer, never to EF Core directly.
-/// Tours belong to a single user and are never shared.
+/// Business logic for tours. Owns validation, ownership enforcement, computed
+/// attributes and full-text search; talks only to the repository layer, never to
+/// EF Core directly. Tours belong to a single user and are never shared.
 /// </summary>
 public class TourService : ITourService
 {
     private readonly ITourRepository _tours;
+    private readonly ITourAttributeCalculator _attributes;
     private readonly ILogger<TourService> _logger;
 
-    public TourService(ITourRepository tours, ILogger<TourService> logger)
+    public TourService(
+        ITourRepository tours,
+        ITourAttributeCalculator attributes,
+        ILogger<TourService> logger)
     {
         _tours = tours;
+        _attributes = attributes;
         _logger = logger;
     }
 
     public async Task<IReadOnlyList<TourDto>> GetAllForUserAsync(int userId)
     {
         var tours = await _tours.GetAllByUserAsync(userId);
-        return tours.Select(t => t.ToDto()).ToList();
+        return tours.Select(ToDtoWithComputed).ToList();
     }
 
     public async Task<TourDto> GetByIdAsync(int id, int userId)
     {
-        return (await GetOwnedTourAsync(id, userId)).ToDto();
+        return ToDtoWithComputed(await GetOwnedTourAsync(id, userId));
     }
 
     public async Task<TourDto> CreateAsync(SaveTourRequest request, int userId)
@@ -40,7 +45,7 @@ public class TourService : ITourService
         entity.UserId = userId;
         var created = await _tours.AddAsync(entity);
         _logger.LogInformation("User {UserId} created tour {TourId} '{Name}'", userId, created.Id, created.Name);
-        return created.ToDto();
+        return ToDtoWithComputed(created);
     }
 
     public async Task<TourDto> UpdateAsync(int id, SaveTourRequest request, int userId)
@@ -51,7 +56,7 @@ public class TourService : ITourService
         request.ApplyTo(existing);
         await _tours.UpdateAsync(existing);
         _logger.LogInformation("User {UserId} updated tour {TourId}", userId, id);
-        return existing.ToDto();
+        return ToDtoWithComputed(existing);
     }
 
     public async Task DeleteAsync(int id, int userId)
@@ -59,6 +64,50 @@ public class TourService : ITourService
         var existing = await GetOwnedTourAsync(id, userId);
         await _tours.DeleteAsync(existing);
         _logger.LogInformation("User {UserId} deleted tour {TourId}", userId, id);
+    }
+
+    public async Task<IReadOnlyList<TourDto>> SearchAsync(int userId, string? query)
+    {
+        var tours = await _tours.GetAllByUserAsync(userId);
+        var dtos = tours.Select(ToDtoWithComputed).ToList();
+
+        var tokens = (query ?? string.Empty)
+            .ToLowerInvariant()
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (tokens.Length == 0)
+            return dtos;
+
+        // Full-text match: every token must appear somewhere in the tour's
+        // haystack, which includes the computed attributes.
+        var results = dtos
+            .Where(dto => tokens.All(token => BuildHaystack(dto).Contains(token)))
+            .ToList();
+
+        _logger.LogInformation("User {UserId} searched '{Query}' -> {Count} result(s)", userId, query, results.Count);
+        return results;
+    }
+
+    /// <summary>Concatenates every searchable field of a tour, computed values included.</summary>
+    private static string BuildHaystack(TourDto dto)
+    {
+        var logText = string.Join(' ', dto.Logs.Select(l =>
+            $"{l.Comment} {l.Difficulty} {l.Rating} {l.TotalDistance} {l.TotalTime}"));
+
+        return string.Join(' ', new[]
+        {
+            dto.Name, dto.Description, dto.From, dto.To, dto.TransportType,
+            dto.Distance.ToString(), dto.EstimatedTime.ToString(),
+            dto.Popularity, dto.ChildFriendliness, logText
+        }).ToLowerInvariant();
+    }
+
+    private TourDto ToDtoWithComputed(Tour tour)
+    {
+        var dto = tour.ToDto();
+        dto.Popularity = _attributes.GetPopularity(tour);
+        dto.ChildFriendliness = _attributes.GetChildFriendliness(tour);
+        return dto;
     }
 
     private async Task<Tour> GetOwnedTourAsync(int id, int userId)

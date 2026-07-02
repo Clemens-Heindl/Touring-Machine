@@ -25,6 +25,13 @@ namespace TourPlannerAPI.Controllers
             return Ok(await _tourService.GetAllForUserAsync(User.GetUserId()));
         }
 
+        // GET: api/Tours/search?q=...
+        [HttpGet("search")]
+        public async Task<ActionResult<IReadOnlyList<TourDto>>> SearchTours([FromQuery] string? q)
+        {
+            return Ok(await _tourService.SearchAsync(User.GetUserId(), q));
+        }
+
         // GET: api/Tours/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TourDto>> GetTour(int id)

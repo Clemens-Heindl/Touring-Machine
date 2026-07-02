@@ -13,5 +13,10 @@ public class TourDto
     public double Distance { get; set; }
     public TimeSpan EstimatedTime { get; set; }
     public string? RouteInformation { get; set; }
+
+    // Computed, read-only attributes derived by the business layer.
+    public string Popularity { get; set; } = string.Empty;
+    public string ChildFriendliness { get; set; } = string.Empty;
+
     public List<TourLogDto> Logs { get; set; } = new();
 }

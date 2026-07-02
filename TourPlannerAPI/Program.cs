@@ -38,6 +38,9 @@ builder.Services.AddScoped<TourPlannerAPI.Repositories.ITourLogRepository, TourP
 builder.Services.AddScoped<TourPlannerAPI.Repositories.IUserRepository, TourPlannerAPI.Repositories.UserRepository>();
 
 // Business logic layer
+builder.Services.Configure<TourPlannerAPI.Configuration.ComputedAttributeOptions>(
+    builder.Configuration.GetSection(TourPlannerAPI.Configuration.ComputedAttributeOptions.SectionName));
+builder.Services.AddScoped<TourPlannerAPI.Services.ITourAttributeCalculator, TourPlannerAPI.Services.TourAttributeCalculator>();
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourService, TourPlannerAPI.Services.TourService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourLogService, TourPlannerAPI.Services.TourLogService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.Services.UserService>();

@@ -15,6 +15,9 @@ export interface Tour {
     routeInformation: string;
     imageUrl: string;
     logs: TourLog[];
+    // Computed by the backend business layer (read-only).
+    popularity?: string;
+    childFriendliness?: string;
 }
 
 export type TourFormValue = Omit<Tour, 'id' | 'logs' | 'userId'>;
