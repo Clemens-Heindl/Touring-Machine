@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TourPlannerAPI.Dtos;
 using TourPlannerAPI.Services;
+using TourPlannerAPI.Utilities;
 
 namespace TourPlannerAPI.Controllers
 {
     [Route("api")]
     [ApiController]
+    [Authorize]
     public class TourLogsController : ControllerBase
     {
         private readonly ITourLogService _tourLogService;
@@ -19,14 +22,14 @@ namespace TourPlannerAPI.Controllers
         [HttpGet("tours/{tourId}/logs")]
         public async Task<ActionResult<IReadOnlyList<TourLogDto>>> GetTourLogs(int tourId)
         {
-            return Ok(await _tourLogService.GetByTourAsync(tourId));
+            return Ok(await _tourLogService.GetByTourAsync(tourId, User.GetUserId()));
         }
 
         // POST: api/tours/5/logs
         [HttpPost("tours/{tourId}/logs")]
         public async Task<ActionResult<TourLogDto>> PostTourLog(int tourId, SaveTourLogRequest request)
         {
-            var created = await _tourLogService.CreateAsync(tourId, request);
+            var created = await _tourLogService.CreateAsync(tourId, request, User.GetUserId());
             return CreatedAtAction(nameof(GetTourLogs), new { tourId = created.TourId }, created);
         }
 
@@ -34,14 +37,14 @@ namespace TourPlannerAPI.Controllers
         [HttpPut("logs/{id}")]
         public async Task<ActionResult<TourLogDto>> PutTourLog(int id, SaveTourLogRequest request)
         {
-            return Ok(await _tourLogService.UpdateAsync(id, request));
+            return Ok(await _tourLogService.UpdateAsync(id, request, User.GetUserId()));
         }
 
         // DELETE: api/logs/5
         [HttpDelete("logs/{id}")]
         public async Task<IActionResult> DeleteTourLog(int id)
         {
-            await _tourLogService.DeleteAsync(id);
+            await _tourLogService.DeleteAsync(id, User.GetUserId());
             return NoContent();
         }
     }

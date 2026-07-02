@@ -1,13 +1,15 @@
 using TourPlannerAPI.Dtos;
 using TourPlannerAPI.Exceptions;
 using TourPlannerAPI.Mapping;
+using TourPlannerAPI.Models;
 using TourPlannerAPI.Repositories;
 
 namespace TourPlannerAPI.Services;
 
 /// <summary>
-/// Business logic for tours. Owns validation and orchestration; talks only to
-/// the repository layer, never to EF Core directly.
+/// Business logic for tours. Owns validation, ownership enforcement and
+/// orchestration; talks only to the repository layer, never to EF Core directly.
+/// Tours belong to a single user and are never shared.
 /// </summary>
 public class TourService : ITourService
 {
@@ -20,45 +22,54 @@ public class TourService : ITourService
         _logger = logger;
     }
 
-    public async Task<IReadOnlyList<TourDto>> GetAllAsync()
+    public async Task<IReadOnlyList<TourDto>> GetAllForUserAsync(int userId)
     {
-        var tours = await _tours.GetAllAsync();
+        var tours = await _tours.GetAllByUserAsync(userId);
         return tours.Select(t => t.ToDto()).ToList();
     }
 
-    public async Task<TourDto> GetByIdAsync(int id)
+    public async Task<TourDto> GetByIdAsync(int id, int userId)
     {
-        var tour = await _tours.GetByIdAsync(id)
-            ?? throw new NotFoundException("Tour", id);
-        return tour.ToDto();
+        return (await GetOwnedTourAsync(id, userId)).ToDto();
     }
 
-    public async Task<TourDto> CreateAsync(SaveTourRequest request)
+    public async Task<TourDto> CreateAsync(SaveTourRequest request, int userId)
     {
         Validate(request);
-        var created = await _tours.AddAsync(request.ToEntity());
-        _logger.LogInformation("Created tour {TourId} '{Name}'", created.Id, created.Name);
+        var entity = request.ToEntity();
+        entity.UserId = userId;
+        var created = await _tours.AddAsync(entity);
+        _logger.LogInformation("User {UserId} created tour {TourId} '{Name}'", userId, created.Id, created.Name);
         return created.ToDto();
     }
 
-    public async Task<TourDto> UpdateAsync(int id, SaveTourRequest request)
+    public async Task<TourDto> UpdateAsync(int id, SaveTourRequest request, int userId)
     {
         Validate(request);
-        var existing = await _tours.GetByIdAsync(id)
-            ?? throw new NotFoundException("Tour", id);
+        var existing = await GetOwnedTourAsync(id, userId);
 
         request.ApplyTo(existing);
         await _tours.UpdateAsync(existing);
-        _logger.LogInformation("Updated tour {TourId}", id);
+        _logger.LogInformation("User {UserId} updated tour {TourId}", userId, id);
         return existing.ToDto();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int id, int userId)
     {
-        var existing = await _tours.GetByIdAsync(id)
-            ?? throw new NotFoundException("Tour", id);
+        var existing = await GetOwnedTourAsync(id, userId);
         await _tours.DeleteAsync(existing);
-        _logger.LogInformation("Deleted tour {TourId}", id);
+        _logger.LogInformation("User {UserId} deleted tour {TourId}", userId, id);
+    }
+
+    private async Task<Tour> GetOwnedTourAsync(int id, int userId)
+    {
+        var tour = await _tours.GetByIdAsync(id)
+            ?? throw new NotFoundException("Tour", id);
+
+        if (tour.UserId != userId)
+            throw new ForbiddenException("You do not have access to this tour.");
+
+        return tour;
     }
 
     private static void Validate(SaveTourRequest request)

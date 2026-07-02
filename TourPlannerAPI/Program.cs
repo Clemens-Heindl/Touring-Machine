@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TourPlannerAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +42,29 @@ builder.Services.AddScoped<TourPlannerAPI.Services.ITourService, TourPlannerAPI.
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourLogService, TourPlannerAPI.Services.TourLogService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.Services.UserService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
+builder.Services.AddScoped<TourPlannerAPI.Services.IJwtTokenService, TourPlannerAPI.Services.JwtTokenService>();
+
+// JWT bearer authentication (all parameters come from configuration)
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection["Key"]
+    ?? throw new InvalidOperationException("Jwt:Key is not configured.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtSection["Issuer"],
+            ValidateAudience = true,
+            ValidAudience = jwtSection["Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 
@@ -58,6 +84,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(AngularCorsPolicy);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

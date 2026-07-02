@@ -34,5 +34,13 @@ namespace TourPlannerAPI.Models
         [ForeignKey("TourId")]
         [JsonIgnore]
         public Tour? Tour { get; set; }
+
+        // Owner of the log (matches the createdBy relationship in the UML).
+        [Required]
+        public int UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        [JsonIgnore]
+        public User? User { get; set; }
     }
 }
