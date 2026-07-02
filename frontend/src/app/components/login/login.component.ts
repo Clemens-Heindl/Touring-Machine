@@ -51,9 +51,9 @@ export class LoginComponent {
 
       this.isLoading = true;
       this.authService.register(this.name.trim(), this.email.trim(), this.password).subscribe({
-        next: createdUser => {
+        next: auth => {
           this.isLoading = false;
-          this.userState.setCurrentUser(createdUser);
+          this.userState.setSession(auth);
           this.name = '';
           this.email = '';
           this.password = '';
@@ -79,10 +79,10 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.authService.login(this.email.trim(), this.password).subscribe({
-      next: user => {
+      next: auth => {
         this.isLoading = false;
-        if (user) {
-          this.userState.setCurrentUser(user);
+        if (auth) {
+          this.userState.setSession(auth);
         } else {
           this.userState.setError('Invalid credentials.');
         }
