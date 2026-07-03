@@ -38,4 +38,12 @@ export class TourService {
       return this.createTour(tour);
     }
   }
+
+  exportToursFile(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+  }
+
+  importTours(tours: Partial<Tour>[]): Observable<Tour[]> {
+    return this.http.post<Tour[]>(`${this.apiUrl}/import`, tours);
+  }
 }

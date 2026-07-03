@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TourPlannerAPI.Dtos;
@@ -23,6 +25,27 @@ namespace TourPlannerAPI.Controllers
         public async Task<ActionResult<IReadOnlyList<TourDto>>> GetTours()
         {
             return Ok(await _tourService.GetAllForUserAsync(User.GetUserId()));
+        }
+
+        // GET: api/Tours/export  -> downloadable JSON bundle of the user's tours
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportTours()
+        {
+            var tours = await _tourService.GetAllForUserAsync(User.GetUserId());
+            var json = JsonSerializer.Serialize(tours, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            });
+            var bytes = Encoding.UTF8.GetBytes(json);
+            return File(bytes, "application/json", "tours.json");
+        }
+
+        // POST: api/Tours/import  -> persist an imported JSON bundle for the user
+        [HttpPost("import")]
+        public async Task<ActionResult<IReadOnlyList<TourDto>>> ImportTours(List<TourImportDto> tours)
+        {
+            return Ok(await _tourService.ImportAsync(User.GetUserId(), tours));
         }
 
         // GET: api/Tours/search?q=...

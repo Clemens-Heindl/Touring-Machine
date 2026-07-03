@@ -11,4 +11,5 @@ public interface ITourService
     Task<TourDto> UpdateAsync(int id, SaveTourRequest request, int userId);
     Task DeleteAsync(int id, int userId);
     Task<IReadOnlyList<TourDto>> SearchAsync(int userId, string? query);
+    Task<IReadOnlyList<TourDto>> ImportAsync(int userId, IEnumerable<TourImportDto> tours);
 }

@@ -88,6 +88,47 @@ public class TourService : ITourService
         return results;
     }
 
+    public async Task<IReadOnlyList<TourDto>> ImportAsync(int userId, IEnumerable<TourImportDto> tours)
+    {
+        var created = new List<TourDto>();
+
+        foreach (var import in tours)
+        {
+            if (string.IsNullOrWhiteSpace(import.Name))
+                continue; // skip malformed entries rather than failing the whole import
+
+            var entity = new Tour
+            {
+                Name = import.Name.Trim(),
+                Description = import.Description,
+                From = import.From?.Trim() ?? string.Empty,
+                To = import.To?.Trim() ?? string.Empty,
+                TransportType = import.TransportType?.Trim() ?? string.Empty,
+                Distance = import.Distance,
+                EstimatedTime = import.EstimatedTime,
+                RouteInformation = import.RouteInformation,
+                ImageFileName = import.ImageFileName,
+                UserId = userId,
+                Logs = import.Logs.Select(l => new TourLog
+                {
+                    DateTime = l.DateTime,
+                    Comment = l.Comment,
+                    Difficulty = l.Difficulty,
+                    TotalDistance = l.TotalDistance,
+                    TotalTime = l.TotalTime,
+                    Rating = l.Rating,
+                    UserId = userId
+                }).ToList()
+            };
+
+            var saved = await _tours.AddAsync(entity);
+            created.Add(ToDtoWithComputed(saved));
+        }
+
+        _logger.LogInformation("User {UserId} imported {Count} tour(s)", userId, created.Count);
+        return created;
+    }
+
     /// <summary>Concatenates every searchable field of a tour, computed values included.</summary>
     private static string BuildHaystack(TourDto dto)
     {
