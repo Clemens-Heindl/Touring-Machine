@@ -13,7 +13,7 @@ export interface Tour {
     distance: number;
     estimatedTime: string;
     routeInformation: string;
-    imageUrl: string;
+    imageFileName?: string;
     logs: TourLog[];
     // Computed by the backend business layer (read-only).
     popularity?: string;

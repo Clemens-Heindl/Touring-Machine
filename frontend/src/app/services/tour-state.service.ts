@@ -15,8 +15,6 @@ const EMPTY_FILTERS: ActiveFilters = {
   childFriendliness: []
 };
 
-const defaultImageUrl = 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80';
-
 const demoTours: Tour[] = [
   {
     id: 1,
@@ -29,7 +27,6 @@ const demoTours: Tour[] = [
     distance: 38,
     estimatedTime: '02:10:00',
     routeInformation: 'Harbor Park -> East River Trail -> Quarry Bend',
-    imageUrl: defaultImageUrl,
     logs: [
       {
         id: 11,
@@ -64,7 +61,6 @@ const demoTours: Tour[] = [
     distance: 14,
     estimatedTime: '04:45:00',
     routeInformation: 'Summit Lot -> Pine Saddle -> Blue Ridge lookout',
-    imageUrl: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
     logs: []
   }
 ];
@@ -286,7 +282,7 @@ export class TourStateService {
       distance: Number(tour.distance ?? 0),
       estimatedTime: this.cleanText(tour.estimatedTime, '00:00:00'),
       routeInformation: this.cleanText(tour.routeInformation, 'Route information will be added by OpenRouteService.'),
-      imageUrl: this.cleanText(tour.imageUrl, defaultImageUrl),
+      imageFileName: tour.imageFileName,
       logs: (tour.logs ?? []).map(log => this.normalizeLog(log, tour.id ?? 0))
     };
   }

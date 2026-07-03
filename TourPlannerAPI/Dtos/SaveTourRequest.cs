@@ -30,6 +30,9 @@ public class SaveTourRequest
 
     public string? RouteInformation { get; set; }
 
+    [MaxLength(260)]
+    public string? ImageFileName { get; set; }
+
     // Temporary: the owning user is taken from the request until JWT auth lands
     // (Commit 7), after which it is derived from the authenticated identity.
     public int UserId { get; set; }

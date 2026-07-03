@@ -1,7 +1,7 @@
 @if (selectedTour(); as tour) {
 <section class="tour-details-container">
     <div class="detail-hero">
-        <img [src]="tour.imageUrl" [alt]="tour.name + ' image'">
+        <img [src]="imageSrc(tour.imageFileName)" [alt]="tour.name + ' image'">
         <div>
             <p class="eyebrow">Selected tour</p>
             <h2>{{ tour.name }}</h2>
@@ -16,7 +16,7 @@
         <div><span>Estimated time</span><strong>{{ tour.estimatedTime }}</strong></div>
         <div><span>Popularity</span><strong>{{ tourState.getPopularity(tour) }}</strong></div>
         <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
-        <div><span>Image</span><strong>Stored as URL</strong></div>
+        <div><span>Image</span><strong>{{ tour.imageFileName ? 'Stored on server' : 'None' }}</strong></div>
     </div>
     <app-map [routeGeoJson]="tour.routeInformation ?? null"></app-map>
 </section>

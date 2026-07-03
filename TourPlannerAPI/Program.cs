@@ -47,6 +47,10 @@ builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IJwtTokenService, TourPlannerAPI.Services.JwtTokenService>();
 
+builder.Services.Configure<TourPlannerAPI.Configuration.ImageStorageOptions>(
+    builder.Configuration.GetSection(TourPlannerAPI.Configuration.ImageStorageOptions.SectionName));
+builder.Services.AddSingleton<TourPlannerAPI.Services.IImageStorageService, TourPlannerAPI.Services.ImageStorageService>();
+
 // JWT bearer authentication (all parameters come from configuration)
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection["Key"]

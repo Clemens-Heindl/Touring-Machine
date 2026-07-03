@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TourService } from '../../services/tour.service';
 import { TourStateService } from '../../services/tour-state.service';
 import { UserStateService } from '../../services/user-state.service';
+import { ImageService } from '../../services/image.service';
 
 import { Tour, TourFormValue } from '../../models/tour.model';
 import { TourFormComponent } from '../tour-form/tour-form.component';
@@ -17,6 +18,7 @@ import { SearchFiltersComponent } from '../search-filters/search-filters.compone
 export class TourListComponent implements OnInit {
   private tourService = inject(TourService);
   private userState = inject(UserStateService);
+  private imageService = inject(ImageService);
   tourState = inject(TourStateService);
 
   readonly tours = this.tourState.filteredTours$;
@@ -40,6 +42,10 @@ export class TourListComponent implements OnInit {
 
   selectTour(tour: Tour) {
     this.tourState.setSelectedTour(tour);
+  }
+
+  imageSrc(fileName?: string): string {
+    return this.imageService.imageUrl(fileName);
   }
 
   startCreateTour() {
@@ -75,7 +81,7 @@ export class TourListComponent implements OnInit {
     const draftTour: Partial<Tour> = { ...formValue, userId, logs: [] };
     this.tourService.createTour(draftTour).subscribe({
       next: newTour => {
-        this.tourState.addTour({ ...draftTour, ...newTour, imageUrl: newTour.imageUrl || formValue.imageUrl });
+        this.tourState.addTour({ ...draftTour, ...newTour, imageFileName: newTour.imageFileName ?? formValue.imageFileName });
         this.closeForm('Tour created.');
       },
       error: () => {

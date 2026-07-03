@@ -43,6 +43,10 @@ yarn-error.log*
 # Logs
 Logs/
 
+# Uploaded tour images (stored on the filesystem, not in git)
+ImageStore/
+TourPlannerAPI/ImageStore/
+
 # Generated files
 project.lock.json
 .vs/

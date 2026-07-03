@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TourStateService } from '../../services/tour-state.service';
+import { ImageService } from '../../services/image.service';
 import { MapComponent } from '../map/map.component';
 
 
@@ -12,7 +13,12 @@ import { MapComponent } from '../map/map.component';
 })
 export class TourDetailsComponent {
   tourState = inject(TourStateService);
+  private imageService = inject(ImageService);
 
   readonly selectedTour = this.tourState.selectedTour$;
+
+  imageSrc(fileName?: string): string {
+    return this.imageService.imageUrl(fileName);
+  }
 }
 

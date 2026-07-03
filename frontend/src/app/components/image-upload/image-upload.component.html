@@ -1,0 +1,35 @@
+<div
+  class="dropzone"
+  [class.dragging]="isDragging"
+  [class.has-image]="hasImage"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  @if (hasImage) {
+    <img class="preview" [src]="previewUrl" alt="Tour image preview">
+  }
+
+  <label class="dropzone-prompt">
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
+    <span class="icon" aria-hidden="true">⬆</span>
+    <span class="prompt-text">
+      {{ hasImage ? 'Drop a new image or click to replace' : 'Drag & drop an image here, or click to browse' }}
+    </span>
+    <span class="hint">JPEG, PNG, WebP or GIF · up to 5 MB</span>
+  </label>
+
+  @if (isUploading) {
+    <div class="progress" role="progressbar" [attr.aria-valuenow]="progress">
+      <div class="progress-bar" [style.width.%]="progress"></div>
+    </div>
+  }
+
+  @if (hasImage && !isUploading) {
+    <button type="button" class="clear-btn" (click)="clear()">Remove</button>
+  }
+
+  @if (error) {
+    <p class="upload-error">{{ error }}</p>
+  }
+</div>

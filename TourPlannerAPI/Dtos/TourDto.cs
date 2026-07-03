@@ -13,6 +13,7 @@ public class TourDto
     public double Distance { get; set; }
     public TimeSpan EstimatedTime { get; set; }
     public string? RouteInformation { get; set; }
+    public string? ImageFileName { get; set; }
 
     // Computed, read-only attributes derived by the business layer.
     public string Popularity { get; set; } = string.Empty;

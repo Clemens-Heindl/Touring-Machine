@@ -18,6 +18,7 @@ public static class DtoMappingExtensions
         Distance = tour.Distance,
         EstimatedTime = tour.EstimatedTime,
         RouteInformation = tour.RouteInformation,
+        ImageFileName = tour.ImageFileName,
         Logs = tour.Logs.Select(l => l.ToDto()).ToList()
     };
 
@@ -31,6 +32,7 @@ public static class DtoMappingExtensions
         Distance = request.Distance,
         EstimatedTime = request.EstimatedTime,
         RouteInformation = request.RouteInformation,
+        ImageFileName = request.ImageFileName,
         UserId = request.UserId
     };
 
@@ -44,6 +46,7 @@ public static class DtoMappingExtensions
         tour.Distance = request.Distance;
         tour.EstimatedTime = request.EstimatedTime;
         tour.RouteInformation = request.RouteInformation;
+        tour.ImageFileName = request.ImageFileName;
     }
 
     public static TourLogDto ToDto(this TourLog log) => new()
