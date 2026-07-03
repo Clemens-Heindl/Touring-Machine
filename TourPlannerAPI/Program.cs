@@ -43,6 +43,7 @@ builder.Services.Configure<TourPlannerAPI.Configuration.ComputedAttributeOptions
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourAttributeCalculator, TourPlannerAPI.Services.TourAttributeCalculator>();
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourService, TourPlannerAPI.Services.TourService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourLogService, TourPlannerAPI.Services.TourLogService>();
+builder.Services.AddScoped<TourPlannerAPI.Services.IStatisticsService, TourPlannerAPI.Services.StatisticsService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.Services.UserService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IJwtTokenService, TourPlannerAPI.Services.JwtTokenService>();

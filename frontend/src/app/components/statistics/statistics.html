@@ -1,4 +1,111 @@
-<div class="statistics-container">
-  <h1>Statistics</h1>
-  <p>This will be a bonus feature and will be implemented soon.</p>
+<div class="statistics-container viz-root">
+  <header class="stats-header">
+    <h1>Statistics</h1>
+    <p class="subtitle">An overview of your tours and accomplished logs.</p>
+  </header>
+
+  @if (isLoading()) {
+    <p class="stats-message">Loading statistics…</p>
+  } @else if (error()) {
+    <p class="stats-message error">{{ error() }}</p>
+  } @else if (!hasData()) {
+    <p class="stats-message">No tours yet. Create a tour and add some logs to see your statistics.</p>
+  } @else {
+    <!-- KPI tiles -->
+    <section class="kpi-grid" aria-label="Key figures">
+      <div class="kpi-tile">
+        <span class="kpi-label">Tours</span>
+        <span class="kpi-value">{{ stats()!.tourCount }}</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Logs</span>
+        <span class="kpi-value">{{ stats()!.logCount }}</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Distance logged</span>
+        <span class="kpi-value">{{ stats()!.totalLoggedDistanceKm }}<span class="kpi-unit">km</span></span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Time logged</span>
+        <span class="kpi-value">{{ stats()!.totalLoggedTimeHours }}<span class="kpi-unit">h</span></span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Avg rating</span>
+        <span class="kpi-value">{{ stats()!.averageRating }}<span class="kpi-unit">/5</span></span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Avg difficulty</span>
+        <span class="kpi-value">{{ stats()!.averageDifficulty }}<span class="kpi-unit">/5</span></span>
+      </div>
+    </section>
+
+    <div class="chart-grid">
+      <!-- Transport breakdown -->
+      <section class="chart-card">
+        <h2>Tours by transport type</h2>
+        @if (transportBars().length === 0) {
+          <p class="stats-message">No tours to break down yet.</p>
+        } @else {
+          <ul class="bar-list">
+            @for (bar of transportBars(); track bar.name) {
+              <li class="bar-row">
+                <span class="bar-name">{{ bar.name }}</span>
+                <span class="bar-track">
+                  <span class="bar-fill" [class]="'slot-' + bar.slot" [style.width.%]="bar.widthPct"></span>
+                </span>
+                <span class="bar-value">{{ bar.count }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- Activity over time -->
+      <section class="chart-card">
+        <h2>Logs over time</h2>
+        @if (activity(); as chart) {
+          <svg class="activity-chart" [attr.viewBox]="'0 0 ' + chart.width + ' ' + chart.height"
+               preserveAspectRatio="xMidYMid meet" role="img" aria-label="Number of logs recorded per month">
+            <!-- gridlines -->
+            @for (g of chart.gridLines; track g.value) {
+              <line class="grid" [attr.x1]="40" [attr.x2]="chart.width - 14" [attr.y1]="g.y" [attr.y2]="g.y"></line>
+              <text class="axis-label y" [attr.x]="34" [attr.y]="g.y + 4" text-anchor="end">{{ g.value }}</text>
+            }
+            <!-- area + line -->
+            <path class="area" [attr.d]="chart.areaPath"></path>
+            <path class="line" [attr.d]="chart.linePath"></path>
+            <!-- points + x labels + native tooltips -->
+            @for (p of chart.points; track p.month) {
+              <circle class="point" [attr.cx]="p.x" [attr.cy]="p.y" r="4">
+                <title>{{ shortMonth(p.month) }}: {{ p.logCount }} log(s)</title>
+              </circle>
+              <text class="axis-label x" [attr.x]="p.x" [attr.y]="chart.baselineY + 18" text-anchor="middle">
+                {{ shortMonth(p.month) }}
+              </text>
+            }
+          </svg>
+        } @else {
+          <p class="stats-message">No logs recorded yet.</p>
+        }
+      </section>
+    </div>
+
+    <!-- Highlights -->
+    <section class="highlight-grid" aria-label="Highlights">
+      @if (stats()!.mostPopularTour; as popular) {
+        <div class="highlight-card">
+          <span class="highlight-label">Most popular tour</span>
+          <span class="highlight-name">{{ popular.name }}</span>
+          <span class="highlight-detail">{{ popular.detail }}</span>
+        </div>
+      }
+      @if (stats()!.mostChallengingTour; as challenging) {
+        <div class="highlight-card">
+          <span class="highlight-label">Most challenging tour</span>
+          <span class="highlight-name">{{ challenging.name }}</span>
+          <span class="highlight-detail">{{ challenging.detail }}</span>
+        </div>
+      }
+    </section>
+  }
 </div>

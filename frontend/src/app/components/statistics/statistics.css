@@ -1,3 +1,242 @@
+.viz-root {
+  /* Chart chrome & ink (validated reference palette) */
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  /* Categorical slots (fixed order) */
+  --slot-1: #2a78d6;
+  --slot-2: #1baf7a;
+  --slot-3: #eda100;
+  --slot-4: #008300;
+  --series-1: #2a78d6;
+  --series-1-fill: rgba(42, 120, 214, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  .viz-root {
+    --surface-1: #1a1a19;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --slot-1: #3987e5;
+    --slot-2: #199e70;
+    --slot-3: #c98500;
+    --slot-4: #008300;
+    --series-1: #3987e5;
+    --series-1-fill: rgba(57, 135, 229, 0.2);
+  }
+}
+
 .statistics-container {
-  padding: 20px;
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  color: var(--text-primary);
+}
+
+.stats-header h1 {
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--text-secondary);
+}
+
+.stats-message {
+  color: var(--text-secondary);
+  padding: 1rem 0;
+}
+
+.stats-message.error {
+  color: #d03b3b;
+}
+
+/* KPI tiles */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-1);
+}
+
+.kpi-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kpi-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.kpi-unit {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 0.15rem;
+}
+
+/* Charts */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-card {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-1);
+}
+
+.chart-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+/* Bar list */
+.bar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 2rem;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bar-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.bar-track {
+  background: var(--grid);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.bar-fill.slot-1 { background: var(--slot-1); }
+.bar-fill.slot-2 { background: var(--slot-2); }
+.bar-fill.slot-3 { background: var(--slot-3); }
+.bar-fill.slot-4 { background: var(--slot-4); }
+
+.bar-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Activity chart */
+.activity-chart {
+  width: 100%;
+  height: auto;
+}
+
+.activity-chart .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.activity-chart .area {
+  fill: var(--series-1-fill);
+}
+
+.activity-chart .line {
+  fill: none;
+  stroke: var(--series-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.activity-chart .point {
+  fill: var(--surface-1);
+  stroke: var(--series-1);
+  stroke-width: 2;
+}
+
+.activity-chart .axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+/* Highlights */
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.highlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-1);
+}
+
+.highlight-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.highlight-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.highlight-detail {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 620px) {
+  .statistics-container {
+    padding: 1rem;
+  }
+  .kpi-value {
+    font-size: 1.5rem;
+  }
 }
