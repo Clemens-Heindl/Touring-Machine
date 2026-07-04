@@ -26,7 +26,7 @@ export class TourFormComponent implements OnInit {
   isLoadingRoute = false;
   routeError: string | null = null;
 
-  readonly transportTypes: TransportType[] = ['Bike', 'Hike', 'Running', 'Vacation'];
+  readonly transportTypes: TransportType[] = ['Car', 'Bike', 'Hike', 'Walk'];
   private readonly durationPattern = /^([0-9]{1,2}):[0-5][0-9](:[0-5][0-9])?$/;
   private readonly fb = inject(FormBuilder);
   private readonly routeService = inject(RouteService);

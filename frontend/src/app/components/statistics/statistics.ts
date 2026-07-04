@@ -30,10 +30,10 @@ interface ActivityChart {
 // Fixed categorical slot per transport type so a colour always follows the
 // entity, never its rank in the sorted list.
 const TRANSPORT_SLOTS: Record<string, number> = {
-  Bike: 1,
-  Hike: 2,
-  Running: 3,
-  Vacation: 4
+  Car: 1,
+  Bike: 2,
+  Hike: 3,
+  Walk: 4
 };
 
 @Component({

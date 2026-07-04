@@ -77,6 +77,11 @@ body {
         font-family: "Cambria", "Georgia", serif;
         line-height: 1.05;
     }
+
+    .brand-lockup h1 {
+        font-size: 1.9rem;
+        letter-spacing: 0.01em;
+    }
     
     .brand-lockup p,
     .status-note,

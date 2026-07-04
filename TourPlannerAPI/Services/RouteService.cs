@@ -9,10 +9,10 @@ public class RouteService : IRouteService
     private static readonly Dictionary<string, string> ProfileMap =
         new(StringComparer.OrdinalIgnoreCase)
         {
-            { "Bike",     "cycling-regular" },
-            { "Hike",     "foot-hiking"     },
-            { "Running",  "foot-running"    },
-            { "Vacation", "driving-car"     }
+            { "Car",  "driving-car"     },
+            { "Bike", "cycling-regular" },
+            { "Hike", "foot-hiking"     },
+            { "Walk", "foot-walking"    }
         };
 
     private readonly IHttpClientFactory _httpClientFactory;

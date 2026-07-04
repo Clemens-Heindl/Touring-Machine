@@ -1,6 +1,6 @@
 import { TourLog } from './tour-log.model';
 
-export type TransportType = 'Bike' | 'Hike' | 'Running' | 'Vacation';
+export type TransportType = 'Car' | 'Bike' | 'Hike' | 'Walk';
 
 export interface Tour {
     id: number;

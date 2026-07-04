@@ -7,10 +7,10 @@
   --grid: #e6ddcc;
   --border: #d8cfbf;
   /* Categorical slots in the app's warm palette (fixed order) */
-  --slot-1: #0d775b; /* teal   - Bike */
-  --slot-2: #e27437; /* orange - Hike */
-  --slot-3: #c98a1e; /* gold   - Running */
-  --slot-4: #9c4f63; /* berry  - Vacation */
+  --slot-1: #0d775b; /* teal   - Car */
+  --slot-2: #e27437; /* orange - Bike */
+  --slot-3: #c98a1e; /* gold   - Hike */
+  --slot-4: #9c4f63; /* berry  - Walk */
   --series-1: #0d775b;
   --series-1-fill: rgba(13, 119, 91, 0.15);
 }
