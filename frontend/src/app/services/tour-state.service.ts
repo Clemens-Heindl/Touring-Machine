@@ -69,6 +69,48 @@ const demoTours: Tour[] = [
   providedIn: 'root'
 })
 export class TourStateService {
+  private readonly storageKey = 'touringMachine.tours';
+  private readonly selectedKey = 'touringMachine.selectedTourId';
+  private readonly searchKey = 'touringMachine.searchTerm';
+  
+  constructor() {
+    // Try to restore cached tours from localStorage so the UI shows previous
+    // content immediately while the API request completes.
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Tour[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const normalized = parsed.map(t => this.normalizeTour(t));
+          this.tours.set(normalized);
+          this.selectedTourId.set(normalized[0]?.id ?? null);
+          this.apiStatus.set('Connected to the ASP.NET API.');
+          // restore selected tour id if present
+          try {
+            const sel = localStorage.getItem(this.selectedKey);
+            if (sel) {
+              const sid = JSON.parse(sel) as number | null;
+              if (sid !== null) this.selectedTourId.set(sid);
+            }
+          } catch {
+            // ignore
+          }
+          // restore search term if present
+          try {
+            const sraw = localStorage.getItem(this.searchKey);
+            if (sraw) {
+              const st = JSON.parse(sraw) as string | null;
+              if (st !== null) this.searchTerm.set(st);
+            }
+          } catch {
+            // ignore
+          }
+        }
+      }
+    } catch {
+      // ignore malformed cache
+    }
+  }
   private tours = signal<Tour[]>(demoTours);
   private selectedTourId = signal<number | null>(demoTours[0]?.id ?? null);
   private searchTerm = signal('');
@@ -134,14 +176,25 @@ export class TourStateService {
     this.tours.set(normalizedTours);
     this.selectedTourId.set(normalizedTours[0]?.id ?? null);
     this.apiStatus.set(normalizedTours.length > 0 ? 'Connected to the ASP.NET API.' : 'Connected to the API. Create your first tour.');
+    this.persist();
   }
 
   setSelectedTour(tour: Tour | null) {
     this.selectedTourId.set(tour?.id ?? null);
+    try {
+      localStorage.setItem(this.selectedKey, JSON.stringify(this.selectedTourId()));
+    } catch {
+      // ignore
+    }
   }
 
   setSearchTerm(term: string) {
     this.searchTerm.set(term);
+    try {
+      localStorage.setItem(this.searchKey, JSON.stringify(term));
+    } catch {
+      // ignore
+    }
   }
 
   toggleTransportFilter(type: string): void {
@@ -174,6 +227,11 @@ export class TourStateService {
   clearAllFilters(): void {
     this.searchTerm.set('');
     this.activeFilters.set({ ...EMPTY_FILTERS });
+    try {
+      localStorage.setItem(this.searchKey, JSON.stringify(''));
+    } catch {
+      // ignore
+    }
   }
 
   setApiStatus(message: string) {
@@ -184,15 +242,18 @@ export class TourStateService {
     const normalizedTour = this.normalizeTour(tour);
     this.tours.update(current => [...current, normalizedTour]);
     this.setSelectedTour(normalizedTour);
+    this.persist();
   }
 
   updateTour(updatedTour: Partial<Tour> & { id: number }) {
     this.tours.update(current => current.map(tour => tour.id === updatedTour.id ? this.normalizeTour({ ...tour, ...updatedTour }) : tour));
+    this.persist();
   }
 
   deleteTour(tourId: number) {
     this.tours.update(current => current.filter(t => t.id !== tourId));
     this.selectedTourId.update(currentId => currentId === tourId ? (this.tours()[0]?.id ?? null) : currentId);
+    this.persist();
   }
 
   addTourLog(tourId: number, log: Partial<TourLog>) {
@@ -205,6 +266,7 @@ export class TourStateService {
 
       return tour;
     }));
+    this.persist();
   }
 
   updateTourLog(tourId: number, updatedLog: Partial<TourLog> & { id: number }) {
@@ -218,6 +280,7 @@ export class TourStateService {
         logs: tour.logs.map(log => log.id === updatedLog.id ? this.normalizeLog({ ...log, ...updatedLog }, tourId) : log)
       };
     }));
+    this.persist();
   }
 
   deleteTourLog(tourId: number, logId: number) {
@@ -228,6 +291,15 @@ export class TourStateService {
 
       return t;
     }));
+    this.persist();
+  }
+
+  private persist(): void {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.tours()));
+    } catch {
+      // ignore storage errors (e.g. quota)
+    }
   }
 
   getPopularity(tour: Tour): string {

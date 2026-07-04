@@ -29,13 +29,22 @@ export class TourListComponent implements OnInit {
   editingTour: Tour | null = null;
 
   ngOnInit(): void {
-    this.tourState.setApiStatus('Loading tours from the ASP.NET API...');
+    // Only show the generic loading status when we don't already have cached tours.
+    if ((this.tourState.tours$() ?? []).length === 0) {
+      this.tourState.setApiStatus('Loading tours from the ASP.NET API...');
+    }
+
     this.tourService.getTours().subscribe({
       next: tours => {
         this.tourState.setTours(tours);
       },
       error: () => {
-        this.tourState.setApiStatus('API is not reachable. You can still use the local demo data.');
+        // Only show an explicit unreachable message when there is no cached data.
+        if ((this.tourState.tours$() ?? []).length === 0) {
+          this.tourState.setApiStatus('API is not reachable. You can still use the local demo data.');
+        }
+        // If cached data exists, keep the connected text so the UI message is
+        // identical whether the content came from localStorage or the API.
       }
     });
   }
