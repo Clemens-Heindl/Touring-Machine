@@ -1,0 +1,63 @@
+.elevation-profile {
+  --surface-1: #fcfcfb;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --series-1: #1baf7a;
+  --series-1-fill: rgba(27, 175, 122, 0.16);
+  --ascent: #d03b3b;
+  --descent: #2a78d6;
+  --text-secondary: #52514e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .elevation-profile {
+    --surface-1: #1a1a19;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --series-1: #199e70;
+    --series-1-fill: rgba(25, 158, 112, 0.22);
+    --ascent: #e66767;
+    --descent: #3987e5;
+    --text-secondary: #c3c2b7;
+  }
+}
+
+.elevation-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.stat.ascent { color: var(--ascent); font-weight: 600; }
+.stat.descent { color: var(--descent); font-weight: 600; }
+
+.elevation-chart {
+  width: 100%;
+  height: auto;
+}
+
+.elevation-chart .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.elevation-chart .axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.elevation-chart .area {
+  fill: var(--series-1-fill);
+}
+
+.elevation-chart .line {
+  fill: none;
+  stroke: var(--series-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}

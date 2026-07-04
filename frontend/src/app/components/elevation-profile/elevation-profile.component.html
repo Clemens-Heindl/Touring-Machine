@@ -1,0 +1,20 @@
+@if (profile(); as p) {
+  <div class="elevation-profile viz-root">
+    <div class="elevation-stats">
+      <span class="stat ascent">▲ {{ p.ascentM }} m</span>
+      <span class="stat descent">▼ {{ p.descentM }} m</span>
+      <span class="stat range">{{ p.minM }}–{{ p.maxM }} m</span>
+      <span class="stat dist">{{ p.distanceKm }} km</span>
+    </div>
+    <svg class="elevation-chart" [attr.viewBox]="'0 0 ' + p.width + ' ' + p.height"
+         preserveAspectRatio="xMidYMid meet" role="img"
+         [attr.aria-label]="'Elevation profile: ascent ' + p.ascentM + ' metres, descent ' + p.descentM + ' metres'">
+      @for (g of p.gridLines; track g.value) {
+        <line class="grid" [attr.x1]="42" [attr.x2]="p.width - 14" [attr.y1]="g.y" [attr.y2]="g.y"></line>
+        <text class="axis-label" [attr.x]="36" [attr.y]="g.y + 4" text-anchor="end">{{ g.value }}</text>
+      }
+      <path class="area" [attr.d]="p.areaPath"></path>
+      <path class="line" [attr.d]="p.linePath"></path>
+    </svg>
+  </div>
+}

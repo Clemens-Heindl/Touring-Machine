@@ -19,6 +19,7 @@
         <div><span>Image</span><strong>{{ tour.imageFileName ? 'Stored on server' : 'None' }}</strong></div>
     </div>
     <app-map [routeGeoJson]="tour.routeInformation ?? null"></app-map>
+    <app-elevation-profile [routeGeoJson]="tour.routeInformation ?? null"></app-elevation-profile>
 </section>
 } @else {
     <section class="empty-state">

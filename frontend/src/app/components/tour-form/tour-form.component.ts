@@ -7,11 +7,12 @@ import { Tour, TourFormValue, TransportType } from '../../models/tour.model';
 import { RouteService } from '../../services/route.service';
 import { MapComponent } from '../map/map.component';
 import { ImageUploadComponent } from '../image-upload/image-upload.component';
+import { ElevationProfileComponent } from '../elevation-profile/elevation-profile.component';
 
 @Component({
   selector: 'app-tour-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MapComponent, ImageUploadComponent],
+  imports: [ReactiveFormsModule, MapComponent, ImageUploadComponent, ElevationProfileComponent],
   templateUrl: './tour-form.component.html',
   styleUrls: ['./tour-form.component.css']
 })
