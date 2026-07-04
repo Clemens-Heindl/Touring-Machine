@@ -1,6 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
 import { Statistics } from '../../models/statistics.model';
+import { downloadBlob } from '../../utils/download';
 
 interface TransportBar {
   name: string;
@@ -105,6 +106,21 @@ export class StatisticsComponent implements OnInit {
   });
 
   readonly hasData = computed(() => (this.stats()?.tourCount ?? 0) > 0);
+  downloadingReport = false;
+
+  downloadReport(): void {
+    this.downloadingReport = true;
+    this.statisticsService.getSummaryReport().subscribe({
+      next: blob => {
+        downloadBlob(blob, 'tour-summary-report.pdf');
+        this.downloadingReport = false;
+      },
+      error: () => {
+        this.downloadingReport = false;
+        this.error.set('Could not generate the PDF report.');
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.statisticsService.getStatistics().subscribe({

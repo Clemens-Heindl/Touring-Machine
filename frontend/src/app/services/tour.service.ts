@@ -46,4 +46,8 @@ export class TourService {
   importTours(tours: Partial<Tour>[]): Observable<Tour[]> {
     return this.http.post<Tour[]>(`${this.apiUrl}/import`, tours);
   }
+
+  getTourReport(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/report`, { responseType: 'blob' });
+  }
 }

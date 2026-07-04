@@ -11,4 +11,8 @@ export class StatisticsService {
   getStatistics(): Observable<Statistics> {
     return this.http.get<Statistics>(this.apiUrl);
   }
+
+  getSummaryReport(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/report`, { responseType: 'blob' });
+  }
 }

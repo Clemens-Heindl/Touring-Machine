@@ -567,6 +567,33 @@ body {
     font-weight: 700;
 }
 
+.detail-actions {
+    margin-top: 12px;
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.report-btn {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 800;
+    background: #0b6f5b;
+    color: white;
+    cursor: pointer;
+}
+
+.report-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
 @media (max-width: 620px) {
     .transport-pill-group {
         gap: 6px;

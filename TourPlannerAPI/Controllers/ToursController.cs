@@ -14,10 +14,12 @@ namespace TourPlannerAPI.Controllers
     public class ToursController : ControllerBase
     {
         private readonly ITourService _tourService;
+        private readonly IReportService _reportService;
 
-        public ToursController(ITourService tourService)
+        public ToursController(ITourService tourService, IReportService reportService)
         {
             _tourService = tourService;
+            _reportService = reportService;
         }
 
         // GET: api/Tours
@@ -83,6 +85,14 @@ namespace TourPlannerAPI.Controllers
         {
             await _tourService.DeleteAsync(id, User.GetUserId());
             return NoContent();
+        }
+
+        // GET: api/Tours/5/report -> PDF
+        [HttpGet("{id}/report")]
+        public async Task<IActionResult> GetTourReport(int id)
+        {
+            var pdf = await _reportService.GenerateTourReportAsync(id, User.GetUserId());
+            return File(pdf, "application/pdf", $"tour-{id}-report.pdf");
         }
     }
 }

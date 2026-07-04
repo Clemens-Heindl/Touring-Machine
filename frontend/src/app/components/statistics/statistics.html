@@ -1,7 +1,14 @@
 <div class="statistics-container viz-root">
   <header class="stats-header">
-    <h1>Statistics</h1>
-    <p class="subtitle">An overview of your tours and accomplished logs.</p>
+    <div>
+      <h1>Statistics</h1>
+      <p class="subtitle">An overview of your tours and accomplished logs.</p>
+    </div>
+    @if (hasData()) {
+      <button type="button" class="report-btn" (click)="downloadReport()" [disabled]="downloadingReport">
+        {{ downloadingReport ? 'Generating PDF…' : 'Download PDF report' }}
+      </button>
+    }
   </header>
 
   @if (isLoading()) {

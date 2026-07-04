@@ -18,6 +18,11 @@
         <div><span>Child friendliness</span><strong>{{ tourState.getChildFriendliness(tour) }}</strong></div>
         <div><span>Image</span><strong>{{ tour.imageFileName ? 'Stored on server' : 'None' }}</strong></div>
     </div>
+    <div class="detail-actions">
+        <button type="button" class="report-btn" (click)="downloadReport(tour.id)" [disabled]="downloadingReport">
+            {{ downloadingReport ? 'Generating PDF…' : 'Download PDF report' }}
+        </button>
+    </div>
     <app-map [routeGeoJson]="tour.routeInformation ?? null"></app-map>
     <app-elevation-profile [routeGeoJson]="tour.routeInformation ?? null"></app-elevation-profile>
 </section>

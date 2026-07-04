@@ -7,6 +7,9 @@ using TourPlannerAPI.Data;
 var builder = WebApplication.CreateBuilder(args);
 const string AngularCorsPolicy = "AngularDevClient";
 
+// QuestPDF community licence (free for this use).
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 // Route all ILogger<T> output through log4net. The rolling-file directory comes
 // from configuration (not hard-coded) via a log4net context property.
 var logDirectory = builder.Configuration["Logging:LogDirectory"] ?? "Logs";
@@ -44,6 +47,7 @@ builder.Services.AddScoped<TourPlannerAPI.Services.ITourAttributeCalculator, Tou
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourService, TourPlannerAPI.Services.TourService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.ITourLogService, TourPlannerAPI.Services.TourLogService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IStatisticsService, TourPlannerAPI.Services.StatisticsService>();
+builder.Services.AddScoped<TourPlannerAPI.Services.IReportService, TourPlannerAPI.Services.ReportService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IUserService, TourPlannerAPI.Services.UserService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IRouteService, TourPlannerAPI.Services.RouteService>();
 builder.Services.AddScoped<TourPlannerAPI.Services.IJwtTokenService, TourPlannerAPI.Services.JwtTokenService>();
