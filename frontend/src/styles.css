@@ -567,8 +567,23 @@ body {
     font-weight: 700;
 }
 
-.detail-actions {
-    margin-top: 12px;
+.detail-hero-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.report-btn.small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .stats-header {
