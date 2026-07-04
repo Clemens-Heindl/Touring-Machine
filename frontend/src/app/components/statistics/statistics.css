@@ -1,37 +1,18 @@
 .viz-root {
-  /* Chart chrome & ink (validated reference palette) */
-  --surface-1: #fcfcfb;
-  --text-primary: #0b0b0b;
-  --text-secondary: #52514e;
-  --muted: #898781;
-  --grid: #e1e0d9;
-  --baseline: #c3c2b7;
-  --border: rgba(11, 11, 11, 0.1);
-  /* Categorical slots (fixed order) */
-  --slot-1: #2a78d6;
-  --slot-2: #1baf7a;
-  --slot-3: #eda100;
-  --slot-4: #008300;
-  --series-1: #2a78d6;
-  --series-1-fill: rgba(42, 120, 214, 0.16);
-}
-
-@media (prefers-color-scheme: dark) {
-  .viz-root {
-    --surface-1: #1a1a19;
-    --text-primary: #ffffff;
-    --text-secondary: #c3c2b7;
-    --muted: #898781;
-    --grid: #2c2c2a;
-    --baseline: #383835;
-    --border: rgba(255, 255, 255, 0.1);
-    --slot-1: #3987e5;
-    --slot-2: #199e70;
-    --slot-3: #c98500;
-    --slot-4: #008300;
-    --series-1: #3987e5;
-    --series-1-fill: rgba(57, 135, 229, 0.2);
-  }
+  /* Match the app's warm theme (no dark mode: the app is always light/cream) */
+  --surface-1: rgba(255, 252, 245, 0.92);
+  --text-primary: #18201b;
+  --text-secondary: #6b6255;
+  --muted: #8a7e70;
+  --grid: #e6ddcc;
+  --border: #d8cfbf;
+  /* Categorical slots in the app's warm palette (fixed order) */
+  --slot-1: #0d775b; /* teal   - Bike */
+  --slot-2: #e27437; /* orange - Hike */
+  --slot-3: #c98a1e; /* gold   - Running */
+  --slot-4: #9c4f63; /* berry  - Vacation */
+  --series-1: #0d775b;
+  --series-1-fill: rgba(13, 119, 91, 0.15);
 }
 
 .statistics-container {
@@ -43,6 +24,7 @@
 
 .stats-header h1 {
   margin: 0;
+  font-family: "Cambria", "Georgia", serif;
 }
 
 .subtitle {
@@ -56,7 +38,7 @@
 }
 
 .stats-message.error {
-  color: #d03b3b;
+  color: #a2432f;
 }
 
 /* KPI tiles */
@@ -67,14 +49,20 @@
   margin-bottom: 1.5rem;
 }
 
+.kpi-tile,
+.chart-card,
+.highlight-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  box-shadow: 0 18px 45px rgba(46, 38, 27, 0.08);
+}
+
 .kpi-tile {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-1);
 }
 
 .kpi-label {
@@ -107,9 +95,6 @@
 
 .chart-card {
   padding: 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-1);
 }
 
 .chart-card h2 {
@@ -188,7 +173,7 @@
 }
 
 .activity-chart .point {
-  fill: var(--surface-1);
+  fill: #fffdf7;
   stroke: var(--series-1);
   stroke-width: 2;
 }
@@ -210,9 +195,6 @@
   flex-direction: column;
   gap: 0.3rem;
   padding: 1.1rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-1);
 }
 
 .highlight-label {

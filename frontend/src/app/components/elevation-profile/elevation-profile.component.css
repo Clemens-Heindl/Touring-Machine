@@ -1,25 +1,12 @@
 .elevation-profile {
-  --surface-1: #fcfcfb;
-  --muted: #898781;
-  --grid: #e1e0d9;
-  --series-1: #1baf7a;
-  --series-1-fill: rgba(27, 175, 122, 0.16);
-  --ascent: #d03b3b;
-  --descent: #2a78d6;
-  --text-secondary: #52514e;
-}
-
-@media (prefers-color-scheme: dark) {
-  .elevation-profile {
-    --surface-1: #1a1a19;
-    --muted: #898781;
-    --grid: #2c2c2a;
-    --series-1: #199e70;
-    --series-1-fill: rgba(25, 158, 112, 0.22);
-    --ascent: #e66767;
-    --descent: #3987e5;
-    --text-secondary: #c3c2b7;
-  }
+  /* Match the app's warm theme */
+  --muted: #8a7e70;
+  --grid: #e6ddcc;
+  --series-1: #0d775b;
+  --series-1-fill: rgba(13, 119, 91, 0.15);
+  --ascent: #e27437;  /* orange */
+  --descent: #0d775b; /* teal */
+  --text-secondary: #6b6255;
 }
 
 .elevation-stats {
