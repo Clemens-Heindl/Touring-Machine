@@ -1,101 +1,98 @@
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TourPlannerAPI.Data;
-using TourPlannerAPI.Models;
+using TourPlannerAPI.Dtos;
+using TourPlannerAPI.Services;
+using TourPlannerAPI.Utilities;
 
 namespace TourPlannerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ToursController : ControllerBase
     {
-        private readonly TourPlannerDbContext _context;
+        private readonly ITourService _tourService;
+        private readonly IReportService _reportService;
 
-        public ToursController(TourPlannerDbContext context)
+        public ToursController(ITourService tourService, IReportService reportService)
         {
-            _context = context;
+            _tourService = tourService;
+            _reportService = reportService;
         }
 
         // GET: api/Tours
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tour>>> GetTours()
+        public async Task<ActionResult<IReadOnlyList<TourDto>>> GetTours()
         {
-            return await _context.Tours.Include(t => t.Logs).ToListAsync();
+            return Ok(await _tourService.GetAllForUserAsync(User.GetUserId()));
+        }
+
+        // GET: api/Tours/export  -> downloadable JSON bundle of the user's tours
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportTours()
+        {
+            var tours = await _tourService.GetAllForUserAsync(User.GetUserId());
+            var json = JsonSerializer.Serialize(tours, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            });
+            var bytes = Encoding.UTF8.GetBytes(json);
+            return File(bytes, "application/json", "tours.json");
+        }
+
+        // POST: api/Tours/import  -> persist an imported JSON bundle for the user
+        [HttpPost("import")]
+        public async Task<ActionResult<IReadOnlyList<TourDto>>> ImportTours(List<TourImportDto> tours)
+        {
+            return Ok(await _tourService.ImportAsync(User.GetUserId(), tours));
+        }
+
+        // GET: api/Tours/search?q=...
+        [HttpGet("search")]
+        public async Task<ActionResult<IReadOnlyList<TourDto>>> SearchTours([FromQuery] string? q)
+        {
+            return Ok(await _tourService.SearchAsync(User.GetUserId(), q));
         }
 
         // GET: api/Tours/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tour>> GetTour(int id)
+        public async Task<ActionResult<TourDto>> GetTour(int id)
         {
-            var tour = await _context.Tours.Include(t => t.Logs).FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tour == null)
-            {
-                return NotFound();
-            }
-
-            return tour;
-        }
-
-        // PUT: api/Tours/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Tour>> PutTour(int id, Tour tour)
-        {
-            if (id != tour.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tour).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TourExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return UpdatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
+            return Ok(await _tourService.GetByIdAsync(id, User.GetUserId()));
         }
 
         // POST: api/Tours
         [HttpPost]
-        public async Task<ActionResult<Tour>> PostTour(Tour tour)
+        public async Task<ActionResult<TourDto>> PostTour(SaveTourRequest request)
         {
-            _context.Tours.Add(tour);
-            await _context.SaveChangesAsync();
+            var created = await _tourService.CreateAsync(request, User.GetUserId());
+            return CreatedAtAction(nameof(GetTour), new { id = created.Id }, created);
+        }
 
-            return CreatedAtAction(nameof(GetTour), new { id = tour.Id }, tour);
+        // PUT: api/Tours/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<TourDto>> PutTour(int id, SaveTourRequest request)
+        {
+            return Ok(await _tourService.UpdateAsync(id, request, User.GetUserId()));
         }
 
         // DELETE: api/Tours/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTour(int id)
         {
-            var tour = await _context.Tours.FindAsync(id);
-            if (tour == null)
-            {
-                return NotFound();
-            }
-
-            _context.Tours.Remove(tour);
-            await _context.SaveChangesAsync();
-
+            await _tourService.DeleteAsync(id, User.GetUserId());
             return NoContent();
         }
 
-        private bool TourExists(int id)
+        // GET: api/Tours/5/report -> PDF
+        [HttpGet("{id}/report")]
+        public async Task<IActionResult> GetTourReport(int id)
         {
-            return _context.Tours.Any(e => e.Id == id);
+            var pdf = await _reportService.GenerateTourReportAsync(id, User.GetUserId());
+            return File(pdf, "application/pdf", $"tour-{id}-report.pdf");
         }
     }
 }

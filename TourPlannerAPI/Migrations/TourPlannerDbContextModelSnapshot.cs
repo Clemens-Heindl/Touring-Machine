@@ -45,6 +45,10 @@ namespace TourPlannerAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("ImageFileName")
+                        .HasMaxLength(260)
+                        .HasColumnType("character varying(260)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -103,9 +107,14 @@ namespace TourPlannerAPI.Migrations
                     b.Property<int>("TourId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TourId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TourLogs");
                 });
@@ -157,7 +166,15 @@ namespace TourPlannerAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TourPlannerAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Tour");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TourPlannerAPI.Models.Tour", b =>

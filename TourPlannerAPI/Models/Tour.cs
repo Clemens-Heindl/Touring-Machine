@@ -36,6 +36,10 @@ namespace TourPlannerAPI.Models
         [JsonIgnore]
         public string? RouteInformation { get; set; } // Could store GeoJSON or similar
 
+        // Name of the image file stored on the filesystem (not the image bytes).
+        [MaxLength(260)]
+        public string? ImageFileName { get; set; }
+
         public ICollection<TourLog> Logs { get; set; } = new List<TourLog>();
 
         [Required]

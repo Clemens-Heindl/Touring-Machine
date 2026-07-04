@@ -1,0 +1,104 @@
+.dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 160px;
+  padding: 1rem;
+  border: 2px dashed var(--border-color, #cbd5e1);
+  border-radius: 12px;
+  background: var(--surface-muted, #f8fafc);
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: center;
+}
+
+.dropzone.dragging {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.dropzone.has-image {
+  min-height: 200px;
+}
+
+.preview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.dropzone-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: var(--text-muted, #475569);
+}
+
+.dropzone.has-image .dropzone-prompt {
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  opacity: 0;
+  background: rgba(15, 23, 42, 0.55);
+  color: #fff;
+  border-radius: 12px;
+  transition: opacity 0.15s ease;
+}
+
+.dropzone.has-image:hover .dropzone-prompt {
+  opacity: 1;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.prompt-text {
+  font-weight: 600;
+}
+
+.hint {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.progress {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.4);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #2563eb;
+  transition: width 0.2s ease;
+}
+
+.clear-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #fff;
+  cursor: pointer;
+}
+
+.upload-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin: 0;
+}

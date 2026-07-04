@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { from, Observable, of } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
-import { User } from '../models/user.model';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthResponse } from '../models/auth-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,38 +11,13 @@ export class AuthService {
   private apiUrl = '/api/users';
   private http = inject(HttpClient);
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  register(name: string, email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { name, email, password });
   }
 
-  private async hashPassword(password: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-
-    return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
-  }
-
-  register(user: User): Observable<User> {
-    return from(this.hashPassword(user.passwordHash)).pipe(
-      switchMap(passwordHash => {
-        const secureUser = { ...user, passwordHash };
-        return this.http.post<User>(this.apiUrl, secureUser);
-      })
-    );
-  }
-
-  login(email: string, password: string): Observable<User | null> {
-    return from(this.hashPassword(password)).pipe(
-      switchMap(passwordHash => {
-        const params = new HttpParams()
-          .set('email', email)
-          .set('passwordHash', passwordHash);
-
-        return this.http.get<User>(`${this.apiUrl}/login`, { params }).pipe(
-          catchError(() => of(null))
-        );
-      })
+  login(email: string, password: string): Observable<AuthResponse | null> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      catchError(() => of(null))
     );
   }
 }

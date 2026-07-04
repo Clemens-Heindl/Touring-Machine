@@ -11,7 +11,7 @@ import { TourStateService } from '../../services/tour-state.service';
 export class SearchFiltersComponent {
   readonly tourState = inject(TourStateService);
 
-  readonly transportTypes = ['Bike', 'Hike', 'Running', 'Vacation'];
+  readonly transportTypes = ['Car', 'Bike', 'Hike', 'Walk'];
   readonly popularities = ['New', 'Known', 'Popular'];
   readonly suitabilities = ['Child-friendly', 'Moderate', 'Challenging'];
 

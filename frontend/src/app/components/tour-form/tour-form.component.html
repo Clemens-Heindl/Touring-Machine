@@ -59,6 +59,7 @@
     <p class="route-status route-error">{{ routeError }}</p>
     }
     <app-map [routeGeoJson]="routePreviewGeoJson"></app-map>
+    <app-elevation-profile [routeGeoJson]="routePreviewGeoJson"></app-elevation-profile>
   </div>
 
   <div class="form-grid two-columns">
@@ -79,13 +80,13 @@
     </label>
   </div>
 
-  <label>
-    Image URL
-    <input formControlName="imageUrl" placeholder="https://example.com/tour.jpg">
-    @if (hasError('imageUrl')) {
-      <span class="field-error">Image URL is required.</span>
-    }
-  </label>
+  <div class="form-block">
+    <span class="block-label">Tour image</span>
+    <app-image-upload
+      [fileName]="tourForm.get('imageFileName')?.value ?? null"
+      (fileNameChange)="onImageUploaded($event)"
+    ></app-image-upload>
+  </div>
 
   <div class="button-row form-actions">
     <button type="submit" class="primary-btn">{{ isEditing ? 'Save tour' : 'Create tour' }}</button>

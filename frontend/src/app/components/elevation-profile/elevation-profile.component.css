@@ -1,0 +1,50 @@
+.elevation-profile {
+  /* Match the app's warm theme */
+  --muted: #8a7e70;
+  --grid: #e6ddcc;
+  --series-1: #0d775b;
+  --series-1-fill: rgba(13, 119, 91, 0.15);
+  --ascent: #e27437;  /* orange */
+  --descent: #0d775b; /* teal */
+  --text-secondary: #6b6255;
+}
+
+.elevation-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.stat.ascent { color: var(--ascent); font-weight: 600; }
+.stat.descent { color: var(--descent); font-weight: 600; }
+
+.elevation-chart {
+  width: 100%;
+  height: auto;
+}
+
+.elevation-chart .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.elevation-chart .axis-label {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.elevation-chart .area {
+  fill: var(--series-1-fill);
+}
+
+.elevation-chart .line {
+  fill: none;
+  stroke: var(--series-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}

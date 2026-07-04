@@ -27,7 +27,7 @@
     <ul class="tour-list">
         @for (tour of tours(); track tour.id) {
         <li (click)="selectTour(tour)" [class.active]="tour.id === selectedTour()?.id" tabindex="0">
-            <img [src]="tour.imageUrl" [alt]="tour.name + ' image'">
+            <img [src]="imageSrc(tour.imageFileName)" [alt]="tour.name + ' image'">
             <div class="tour-summary">
                 <h3>{{ tour.name }}</h3>
                 <p>{{ tour.from }} -> {{ tour.to }}</p>

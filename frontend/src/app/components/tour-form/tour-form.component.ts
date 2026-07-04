@@ -6,11 +6,13 @@ import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap 
 import { Tour, TourFormValue, TransportType } from '../../models/tour.model';
 import { RouteService } from '../../services/route.service';
 import { MapComponent } from '../map/map.component';
+import { ImageUploadComponent } from '../image-upload/image-upload.component';
+import { ElevationProfileComponent } from '../elevation-profile/elevation-profile.component';
 
 @Component({
   selector: 'app-tour-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MapComponent],
+  imports: [ReactiveFormsModule, MapComponent, ImageUploadComponent, ElevationProfileComponent],
   templateUrl: './tour-form.component.html',
   styleUrls: ['./tour-form.component.css']
 })
@@ -24,7 +26,7 @@ export class TourFormComponent implements OnInit {
   isLoadingRoute = false;
   routeError: string | null = null;
 
-  readonly transportTypes: TransportType[] = ['Bike', 'Hike', 'Running', 'Vacation'];
+  readonly transportTypes: TransportType[] = ['Car', 'Bike', 'Hike', 'Walk'];
   private readonly durationPattern = /^([0-9]{1,2}):[0-5][0-9](:[0-5][0-9])?$/;
   private readonly fb = inject(FormBuilder);
   private readonly routeService = inject(RouteService);
@@ -39,8 +41,12 @@ export class TourFormComponent implements OnInit {
     distance: [1, [Validators.required, Validators.min(0.1)]],
     estimatedTime: ['01:00:00', [Validators.required, Validators.pattern(this.durationPattern)]],
     routeInformation: [''],
-    imageUrl: ['', Validators.required]
+    imageFileName: [null as string | null]
   });
+
+  onImageUploaded(fileName: string | null): void {
+    this.tourForm.patchValue({ imageFileName: fileName });
+  }
 
   constructor() {
     effect(() => {
@@ -153,7 +159,7 @@ export class TourFormComponent implements OnInit {
         distance: tour.distance,
         estimatedTime: tour.estimatedTime,
         routeInformation: tour.routeInformation,
-        imageUrl: tour.imageUrl
+        imageFileName: tour.imageFileName ?? null
       });
       return;
     }
@@ -169,7 +175,7 @@ export class TourFormComponent implements OnInit {
       distance: 1,
       estimatedTime: '01:00:00',
       routeInformation: '',
-      imageUrl: ''
+      imageFileName: null
     });
   }
 

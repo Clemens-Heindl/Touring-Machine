@@ -77,6 +77,11 @@ body {
         font-family: "Cambria", "Georgia", serif;
         line-height: 1.05;
     }
+
+    .brand-lockup h1 {
+        font-size: 1.9rem;
+        letter-spacing: 0.01em;
+    }
     
     .brand-lockup p,
     .status-note,
@@ -565,6 +570,48 @@ body {
     font-size: 0.78rem;
     color: #8a7e70;
     font-weight: 700;
+}
+
+.detail-hero-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.report-btn.small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.report-btn {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 800;
+    background: #0b6f5b;
+    color: white;
+    cursor: pointer;
+}
+
+.report-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
 }
 
 @media (max-width: 620px) {

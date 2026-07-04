@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { UserStateService } from '../../services/user-state.service';
-import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -51,17 +50,10 @@ export class LoginComponent {
       }
 
       this.isLoading = true;
-      const newUser: User = {
-        id: 0,
-        name: this.name.trim(),
-        email: this.email.trim(),
-        passwordHash: this.password
-      };
-
-      this.authService.register(newUser).subscribe({
-        next: createdUser => {
+      this.authService.register(this.name.trim(), this.email.trim(), this.password).subscribe({
+        next: auth => {
           this.isLoading = false;
-          this.userState.setCurrentUser(createdUser);
+          this.userState.setSession(auth);
           this.name = '';
           this.email = '';
           this.password = '';
@@ -87,10 +79,10 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.authService.login(this.email.trim(), this.password).subscribe({
-      next: user => {
+      next: auth => {
         this.isLoading = false;
-        if (user) {
-          this.userState.setCurrentUser(user);
+        if (auth) {
+          this.userState.setSession(auth);
         } else {
           this.userState.setError('Invalid credentials.');
         }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tour } from '../models/tour.model';
 
@@ -12,6 +12,11 @@ export class TourService {
 
   getTours(): Observable<Tour[]> {
     return this.http.get<Tour[]>(this.apiUrl);
+  }
+
+  searchTours(query: string): Observable<Tour[]> {
+    const params = new HttpParams().set('q', query);
+    return this.http.get<Tour[]>(`${this.apiUrl}/search`, { params });
   }
 
   createTour(tour: Partial<Tour>): Observable<Tour> {
@@ -32,5 +37,17 @@ export class TourService {
     } else {
       return this.createTour(tour);
     }
+  }
+
+  exportToursFile(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+  }
+
+  importTours(tours: Partial<Tour>[]): Observable<Tour[]> {
+    return this.http.post<Tour[]>(`${this.apiUrl}/import`, tours);
+  }
+
+  getTourReport(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${id}/report`, { responseType: 'blob' });
   }
 }

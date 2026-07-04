@@ -1,34 +1,38 @@
-using System.Security.Cryptography;
-using System.Text;
-
 namespace TourPlannerAPI.Utilities
 {
+    /// <summary>
+    /// Hashes and verifies passwords with BCrypt (per-password salt, adaptive
+    /// work factor). Hashing happens on the server; the client only ever sends
+    /// the raw password over HTTPS.
+    /// </summary>
     public static class PasswordHelper
     {
         public static string HashPassword(string password)
         {
-            if (password is null)
+            if (string.IsNullOrEmpty(password))
             {
-                throw new ArgumentNullException(nameof(password));
+                throw new ArgumentException("Password must not be empty.", nameof(password));
             }
 
-            using var sha256 = SHA256.Create();
-            var bytes = Encoding.UTF8.GetBytes(password);
-            var hash = sha256.ComputeHash(bytes);
-
-            return Convert.ToHexString(hash);
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public static bool VerifyPassword(string passwordHash, string storedHash)
+        public static bool VerifyPassword(string password, string storedHash)
         {
-            if (string.IsNullOrWhiteSpace(passwordHash) || string.IsNullOrWhiteSpace(storedHash))
+            if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(storedHash))
             {
                 return false;
             }
 
-            return CryptographicOperations.FixedTimeEquals(
-                Encoding.UTF8.GetBytes(passwordHash),
-                Encoding.UTF8.GetBytes(storedHash));
+            try
+            {
+                return BCrypt.Net.BCrypt.Verify(password, storedHash);
+            }
+            catch (BCrypt.Net.SaltParseException)
+            {
+                // Stored value is not a valid BCrypt hash (e.g. legacy data).
+                return false;
+            }
         }
     }
 }

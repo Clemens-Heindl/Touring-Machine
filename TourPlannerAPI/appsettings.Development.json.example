@@ -1,0 +1,21 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=TourPlanner;Username=postgres;Password=CHANGE_ME;SSL Mode=Disable;Trust Server Certificate=true"
+  },
+  "OpenRouteService": {
+    "ApiKey": "PUT_YOUR_OWN_OPENROUTESERVICE_API_KEY_HERE",
+    "BaseUrl": "https://api.openrouteservice.org"
+  },
+  "Jwt": {
+    "Key": "REPLACE_WITH_A_LONG_RANDOM_SECRET_AT_LEAST_32_CHARS",
+    "Issuer": "TourPlannerAPI",
+    "Audience": "TourPlannerClient",
+    "ExpiryMinutes": "120"
+  }
+}
