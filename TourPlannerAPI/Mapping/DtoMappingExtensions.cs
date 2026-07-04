@@ -61,9 +61,21 @@ public static class DtoMappingExtensions
         TourId = log.TourId
     };
 
+    /// <summary>
+    /// Npgsql maps <see cref="DateTime"/> to 'timestamp with time zone' and only
+    /// accepts UTC. Incoming values (e.g. from a datetime-local field) are
+    /// Unspecified, so normalise them to UTC.
+    /// </summary>
+    public static DateTime AsUtc(DateTime value) => value.Kind switch
+    {
+        DateTimeKind.Utc => value,
+        DateTimeKind.Local => value.ToUniversalTime(),
+        _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+    };
+
     public static TourLog ToEntity(this SaveTourLogRequest request, int tourId) => new()
     {
-        DateTime = request.DateTime,
+        DateTime = AsUtc(request.DateTime),
         Comment = request.Comment,
         Difficulty = request.Difficulty,
         TotalDistance = request.TotalDistance,
@@ -74,7 +86,7 @@ public static class DtoMappingExtensions
 
     public static void ApplyTo(this SaveTourLogRequest request, TourLog log)
     {
-        log.DateTime = request.DateTime;
+        log.DateTime = AsUtc(request.DateTime);
         log.Comment = request.Comment;
         log.Difficulty = request.Difficulty;
         log.TotalDistance = request.TotalDistance;

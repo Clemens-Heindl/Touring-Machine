@@ -111,7 +111,7 @@ public class TourService : ITourService
                 UserId = userId,
                 Logs = import.Logs.Select(l => new TourLog
                 {
-                    DateTime = l.DateTime,
+                    DateTime = DtoMappingExtensions.AsUtc(l.DateTime),
                     Comment = l.Comment,
                     Difficulty = l.Difficulty,
                     TotalDistance = l.TotalDistance,
