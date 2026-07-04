@@ -44,7 +44,7 @@ An HTTP interceptor attaches the JWT and logs the user out on 401; a route guard
 routes. Leaflet renders the route map; custom SVG components render the statistics charts and the
 elevation profile.
 
-## 3. Design patterns (required)
+## 3. Design patterns 
 
 - **Repository pattern** — `I*Repository` / `*Repository` isolate EF Core from the business layer.
 - **Dependency Injection** — all services/repositories are registered in `Program.cs` and injected via
@@ -123,3 +123,12 @@ tour list, tour details, tour log list/forms). The design is responsive (CSS gri
 theme-aware. Statistics and the elevation profile use a colourblind-safe palette. The reusable
 `app-image-upload` (drag-and-drop) and `app-map` / `app-elevation-profile` are the project's custom reusable
 UI components. Wireframes are in `Wireframe early draft1.png` / `Wireframe early draft2.png`.
+
+## 9. Extra Features
+
+- **Statistics feature**: The backend exposes `GET /api/statistics` (implemented in `StatisticsController`) which returns a per-user `StatisticsDto` computed by the business layer. The statistics include totals (tours, logs), aggregated metrics (total logged distance, total logged time), averages (rating, difficulty), and a breakdown by transport type. The frontend renders these as compact KPI cards and small charts using the project's SVG chart components; the server-side `IStatisticsService` is the authoritative source used by both the API and the PDF summary generator. See [TourPlannerAPI/Controllers/StatisticsController.cs](TourPlannerAPI/Controllers/StatisticsController.cs).
+
+- **PDF reports (generation & download)**: The API provides downloadable PDF reports in two places: a per-tour report (via `ReportService.GenerateTourReportAsync` exposed from the `ToursController`) and a fleet/summary report (`GET /api/statistics/report` in `StatisticsController`). PDFs are generated with QuestPDF and assembled from the business-layer DTOs. Reports embed the elevation profile and a small route sketch as inline SVG, include tour attributes and the logs table, and are served with the `application/pdf` content type for browser download. See [TourPlannerAPI/Services/ReportService.cs](TourPlannerAPI/Services/ReportService.cs).
+
+- **Height / elevation profile**: The route geometry request to OpenRouteService is made with `elevation: true`, so the returned GeoJSON contains 3D coordinates. `RouteService` derives ascent/descent/min/max and a downsampled distance-vs-elevation profile from that 3D geometry (pure function `ComputeElevation`), which is used by the frontend's `app-elevation-profile` component and embedded in PDFs. This avoids extra elevation-only API calls and keeps the elevation logic unit-testable (`RouteServiceElevationTests`). See [TourPlannerAPI/Services/RouteService.cs](TourPlannerAPI/Services/RouteService.cs).
+
