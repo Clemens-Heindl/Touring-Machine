@@ -72,7 +72,7 @@ elevation profile.
   avoiding a binary chart dependency.
 - **Full Text search** We decided to have the full text search on the frontend as opposed to the backend for a 
   few reasons such as improving speed by avoiding multiple backend calls, a better performance with a low ammount
-  of tours and also 
+  of tours and also provides a better user experience by changing the search results dynamically after each character.
   
 
 ## 5. Full-text search (sequence)
