@@ -100,21 +100,19 @@ and damaging, and because they are deterministic and fast (no database — repos
 
 ## 7. Time tracking
 
-<!-- TODO: fill in your actual hours per area. -->
-
 | Area | Hours |
 |------|-------|
-| Backend architecture (layers, DAL, BL, exceptions) | |
-| Authentication (JWT, hashing, ownership) | |
-| Computed attributes + search | |
-| Image upload | |
-| Statistics | |
-| Elevation profile | |
-| PDF reports | |
-| Frontend (components, MVVM, Leaflet) | |
-| Unit tests | |
-| Documentation | |
-| **Total** | |
+| Backend architecture (layers, DAL, BL, exceptions) |25|
+| Authentication (JWT, hashing, ownership) |10|
+| Computed attributes + search |9|
+| Image upload |5|
+| Statistics |9|
+| Elevation profile |3|
+| PDF reports |6|
+| Frontend (components, MVVM, Leaflet) |19|
+| Unit tests |4|
+| Documentation |8|
+| **Total** |98|
 
 ## 8. UI / UX
 
@@ -132,3 +130,6 @@ UI components. Wireframes are in `Wireframe early draft1.png` / `Wireframe early
 
 - **Height / elevation profile**: The route geometry request to OpenRouteService is made with `elevation: true`, so the returned GeoJSON contains 3D coordinates. `RouteService` derives ascent/descent/min/max and a downsampled distance-vs-elevation profile from that 3D geometry (pure function `ComputeElevation`), which is used by the frontend's `app-elevation-profile` component and embedded in PDFs. This avoids extra elevation-only API calls and keeps the elevation logic unit-testable (`RouteServiceElevationTests`). See [TourPlannerAPI/Services/RouteService.cs](TourPlannerAPI/Services/RouteService.cs).
 
+## 10. Git Link
+
+> **Git repository:** https://github.com/Clemens-Heindl/Touring-Machine.git <owner>/<repo>`

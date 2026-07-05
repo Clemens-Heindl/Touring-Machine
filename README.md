@@ -5,8 +5,6 @@ statistics of accomplished tours. Users register and log in, create tours (with 
 OpenRouteService), record tour logs, and view computed statistics — including elevation profiles and
 downloadable PDF reports.
 
-> **Git repository:** <!-- TODO: replace with your repository URL --> `https://github.com/<owner>/<repo>`
-
 ## Tech stack
 
 | Layer | Technology |
