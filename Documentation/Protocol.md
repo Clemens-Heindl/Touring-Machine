@@ -70,6 +70,10 @@ elevation profile.
   de-tracked and `.gitignore`d, with an `.example` template documenting the shape.
 - **PDF charts.** QuestPDF renders the elevation profile as inline SVG generated from the same geometry,
   avoiding a binary chart dependency.
+- **Full Text search** We decided to have the full text search on the frontend as opposed to the backend for a 
+  few reasons such as improving speed by avoiding multiple backend calls, a better performance with a low ammount
+  of tours and also 
+  
 
 ## 5. Full-text search (sequence)
 
@@ -102,17 +106,17 @@ and damaging, and because they are deterministic and fast (no database — repos
 
 | Area | Hours |
 |------|-------|
-| Backend architecture (layers, DAL, BL, exceptions) |25|
-| Authentication (JWT, hashing, ownership) |10|
-| Computed attributes + search |9|
-| Image upload |5|
-| Statistics |9|
-| Elevation profile |3|
-| PDF reports |6|
-| Frontend (components, MVVM, Leaflet) |19|
-| Unit tests |4|
-| Documentation |8|
-| **Total** |98|
+| Backend architecture (layers, DAL, BL, exceptions) |21|
+| Authentication (JWT, hashing, ownership) |7|
+| Computed attributes + search |6|
+| Image upload |3|
+| Statistics |8|
+| Elevation profile |2|
+| PDF reports |4|
+| Frontend (components, MVVM, Leaflet) |14|
+| Unit tests |3|
+| Documentation |5|
+| **Total** |73|
 
 ## 8. UI / UX
 
